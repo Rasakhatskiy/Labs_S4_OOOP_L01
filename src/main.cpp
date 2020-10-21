@@ -11,18 +11,6 @@
 int main(int argc, char *argv[])
 {
 
-    InfoSaver saver;
-    saver.add("D:\\Documents\\Sharaga v.2\\Vol 2\\OOOP\\QT_Demo\\main.cpp");
-    saver.add("D:\\Documents\\Sharaga v.2\\Vol 2\\OOOP\\QT_Demo\\mainwindow.cpp");
-    saver.add("D:\\Documents\\Sharaga v.2\\Vol 2\\OOOP\\QT_Demo\\mainwindow.hpp");
-    saver.add("D:\\Documents\\Sharaga v.2\\Vol 2\\OOOP\\QT_Demo\\mainwindow.ui");
-
-    saver.save("D:\\Temp\\test");
-
-
-    QFileInfo fi("D:\\Documents\\Sharaga v.2\\Vol 2\\OOOP\\QT_Demo\\main.cpp");
-    fi.
-
     // Create main window
     QApplication a(argc, argv);
     MainWindow w;
