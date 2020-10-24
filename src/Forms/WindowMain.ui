@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>186</height>
+    <width>608</width>
+    <height>195</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="2">
-     <widget class="QPushButton" name="button_browseResultFile">
+     <widget class="QPushButton" name="button_openExplorer">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -28,7 +28,30 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Browse</string>
+       <string>Open in explorer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QPushButton" name="button_startCreateFilesystem">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Create file system</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_pathSaveFileInfo">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
      </widget>
     </item>
@@ -45,7 +68,20 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="2">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Select result file name :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
      <widget class="QPushButton" name="button_browseModifyFile">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -54,11 +90,24 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Browse</string>
+       <string>Select file</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="2">
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_selectFileForModification">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Select file to modify metadata :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="2">
      <widget class="QPushButton" name="button_startEditMetadata">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -68,6 +117,39 @@
       </property>
       <property name="text">
        <string>Edit metadata</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QLineEdit" name="lineEdit_pathModifyMetadata">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QComboBox" name="comboBox_selectDrive">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="button_browseSaveAs">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Save as</string>
       </property>
      </widget>
     </item>
@@ -84,66 +166,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_selectFileForModification">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Select file to modify metadata :</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="comboBox_selectDriveSave">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="QPushButton" name="button_openExplorer">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Open in explorer</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit_pathSaveFileInfo">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Select result file name :</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
+    <item row="4" column="1">
      <widget class="QProgressBar" name="progressBar">
       <property name="enabled">
        <bool>true</bool>
@@ -165,26 +188,10 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit_pathModifyMetadata">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QPushButton" name="button_startCreateFilesystem">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Create file system</string>
+    <item row="5" column="0" colspan="3">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
      </widget>
     </item>

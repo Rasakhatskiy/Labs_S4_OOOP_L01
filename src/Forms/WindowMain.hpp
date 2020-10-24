@@ -7,6 +7,9 @@
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include <QStorageInfo>
+#include <QFileDialog>
+#include <QProcess>
 
 QT_BEGIN_NAMESPACE
 /*! UI namespace*/
@@ -25,8 +28,19 @@ public:
     /*! Main window destructor.*/
     ~MainWindow();
 
+private slots:
+    void on_button_refreshDrives_clicked();
+
+    void on_button_openExplorer_clicked();
+
+    void on_button_browseSaveAs_clicked();
+
+    void on_button_browseModifyFile_clicked();
+
 private:
     /*! Pointer to user interface of the form.*/
     Ui::MainWindow *ui;
+
+    QList<QStorageInfo> _listStorageInfo;
 };
 #endif // MAINWINDOW_HPP
