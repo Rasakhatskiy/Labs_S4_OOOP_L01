@@ -7,9 +7,12 @@
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include <QMessageBox>
+#include <QFileInfo>
 #include <QStorageInfo>
 #include <QFileDialog>
 #include <QProcess>
+#include "../InfoSaver/infosaver.hpp"
 
 QT_BEGIN_NAMESPACE
 /*! UI namespace*/
@@ -36,6 +39,8 @@ private slots:
     void on_button_browseSaveAs_clicked();
 
     void on_button_browseModifyFile_clicked();
+
+    void on_button_startCreateFilesystem_clicked();
 
 private:
     /*! Pointer to user interface of the form.*/

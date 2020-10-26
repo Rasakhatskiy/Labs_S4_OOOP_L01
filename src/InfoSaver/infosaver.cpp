@@ -41,3 +41,56 @@ void InfoSaver::save(QString resultFilePath)
     if(!file.good())
         throw std::runtime_error("Writing error: " + resultFilePath.toStdString());
 }
+
+void InfoSaver::scan(QString scanDirPath)
+{
+    auto fileInfoScan = QFileInfo(scanDirPath);
+    if (!fileInfoScan.exists() ||
+        !fileInfoScan.isDir())
+        throw std::invalid_argument("Unable to open file " + scanDirPath.toStdString());
+
+   auto dirInfo = QDir(scanDirPath);
+   auto allFiles = dirInfo.entryList(
+       QDir::NoDotAndDotDot |
+       QDir::System |
+       QDir::Hidden  |
+       QDir::AllDirs |
+       QDir::Files,
+       QDir::DirsFirst);
+
+    for (auto &file : allFiles)
+    {
+        auto path = scanDirPath + "\\" + file;
+        auto fileInfoTemp = QFileInfo(path);
+        if (fileInfoTemp.isDir())
+            scan(path);
+        else
+            this->files.append(fileInfoTemp);
+    }
+}
+
+void InfoSaver::print()
+{
+    for(auto &string : files)
+        qDebug() << string.absoluteFilePath();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

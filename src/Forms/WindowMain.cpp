@@ -79,3 +79,27 @@ void MainWindow::on_button_browseModifyFile_clicked()
     if (dialog_saveAs.exec())
         ui->lineEdit_pathModifyMetadata->setText(dialog_saveAs.selectedFiles()[0]);
 }
+
+void MainWindow::on_button_startCreateFilesystem_clicked()
+{
+    auto index = ui->comboBox_selectDrive->currentIndex();
+    if (index < 0 ||
+        index >= _listStorageInfo.size())
+        throw std::invalid_argument("Index " + std::to_string(index) + " does not exists");
+
+    auto path = _listStorageInfo[index].rootPath();
+    path[path.size() - 1] = '\\';
+
+    auto fileInfo = QFileInfo(path);
+    if (!fileInfo.exists())
+    {
+        QMessageBox::warning(
+            this,
+            "Invalid input",
+            "Directory " + path + " does not exists");
+        return;
+    }
+    auto infoSaver = InfoSaver();
+    infoSaver.scan(path);
+    infoSaver.print();
+}

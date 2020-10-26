@@ -4,7 +4,10 @@
 #include<fstream>
 
 #include <QList>
+#include <QDir>
 #include <QFileInfo>
+#include <QtDebug>
+#include "../FileInfo/fileinfo.hpp"
 
 /*!
  * \brief Class for saving information about files to binary file.
@@ -26,27 +29,38 @@ public:
 
     /*!
      * \brief Adds given file info to list.
-     * \param fileInfo File info.
+     * \param[in] fileInfo File info.
      */
     void add(QFileInfo fileInfo);
 
     /*!
      * \brief Creates file infos and adds them to list.
-     * \param filePaths List of full file paths.
+     * \param[in] filePaths List of full file paths.
      */
     void add(QList<QString> filePaths);
 
     /*!
      * \brief Adds list of file info to list.
-     * \param fileInfos File info list.
+     * \param[in] fileInfos File info list.
      */
     void add(QList<QFileInfo> fileInfos);
 
     /*!
      * \brief Saves list of file info to binary file. If file exists, rewrites it.
-     * \param resultFilePath Full result file path.
+     * \param[in] resultFilePath Full result file path.
      */
     void save(QString resultFilePath);
+
+    /*!
+     * \brief Recursivaly scans directory for files and saves info about them.
+     * \param[in] scanDirPath
+     */
+    void scan(QString scanDirPath);
+
+    /*!
+     * \brief Prints list to debug console.
+     */
+    void print();
 };
 
 #endif // INFOSAVER_HPP

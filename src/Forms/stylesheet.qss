@@ -14,11 +14,17 @@ QPushButton:pressed
     background-color: rgb(63, 63, 64);
 
 }
+
 QMainWindow
 {
     background-color: rgb(37, 37, 38);
 }
 
+QMessageBox
+{
+    background-color: rgb(37, 37, 38);
+    color: rgb(241, 241, 241);
+}
 
 
 QLabel
