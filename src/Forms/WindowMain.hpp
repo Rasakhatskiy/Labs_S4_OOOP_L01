@@ -46,6 +46,19 @@ private:
     /*! Pointer to user interface of the form.*/
     Ui::MainWindow *ui;
 
+    /*! List of drives. */
     QList<QStorageInfo> _listStorageInfo;
+
+    /*!
+     * \brief Checks if selected source drive name is valid.
+     * \return Source path if drive is valid, else null.
+     */
+    QString isSourceValid();
+
+    /*!
+     * \brief Checks if result file already exists and asks user if he sure to rewrite.
+     * \return Result name if user agreed or file does not exist. Null if file axists and user not agreed.
+     */
+    QString isResultNameValid();
 };
 #endif // MAINWINDOW_HPP

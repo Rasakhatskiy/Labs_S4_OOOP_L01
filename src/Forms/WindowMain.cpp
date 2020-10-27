@@ -82,24 +82,62 @@ void MainWindow::on_button_browseModifyFile_clicked()
 
 void MainWindow::on_button_startCreateFilesystem_clicked()
 {
+    auto sourcePath = isSourceValid();
+    auto resultPath = isResultNameValid();
+
+    if (sourcePath == NULL ||
+        resultPath == NULL)
+        return;
+
+    auto infoSaver = InfoSaver();
+    infoSaver.scan(sourcePath);
+    infoSaver.save(resultPath);
+}
+
+QString MainWindow::isSourceValid()
+{
+    // Check if something if index valid. It must be valid
     auto index = ui->comboBox_selectDrive->currentIndex();
     if (index < 0 ||
         index >= _listStorageInfo.size())
         throw std::invalid_argument("Index " + std::to_string(index) + " does not exists");
 
-    auto path = _listStorageInfo[index].rootPath();
-    path[path.size() - 1] = '\\';
-
-    auto fileInfo = QFileInfo(path);
-    if (!fileInfo.exists())
+    // Check if this drive exists.
+    auto sourcePath = _listStorageInfo[index].rootPath();
+    sourcePath[sourcePath.size() - 1] = '\\';
+    if (!QFileInfo(sourcePath).exists())
     {
         QMessageBox::warning(
             this,
             "Invalid input",
-            "Directory " + path + " does not exists");
-        return;
+            "Directory " + sourcePath + " does not exists");
+        return NULL;
     }
-    auto infoSaver = InfoSaver();
-    infoSaver.scan(path);
-    infoSaver.print();
+
+    return sourcePath;
+}
+
+QString MainWindow::isResultNameValid()
+{
+    auto resultName = ui->lineEdit_pathSaveFileInfo->text();
+    if (QFileInfo(resultName).exists())
+    {
+        auto result = QMessageBox::warning(
+            this,
+            "Invalid input",
+            "File " + resultName + " already exists",
+            QMessageBox::Yes|QMessageBox::No);
+
+        if (result == QMessageBox::Yes)
+        {
+            // delete file
+            QFile file (resultName);
+            file.remove();
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    return resultName;
 }
