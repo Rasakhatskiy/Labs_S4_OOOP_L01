@@ -60,12 +60,12 @@ void InfoSaver::scan(QString scanDirPath)
 
     for (auto &file : allFiles)
     {
-        auto path = scanDirPath + "\\" + file;
-        auto fileInfoTemp = QFileInfo(path);
+        auto fileInfoTemp = QFileInfo(scanDirPath + "/" + file);
+        auto fullpath = fileInfoTemp.absoluteFilePath();
         if (fileInfoTemp.isDir())
-            scan(path);
+            scan(fullpath);
         else
-            this->files.append(fileInfoTemp);
+            this->files.append(fullpath);
     }
 }
 
@@ -73,6 +73,14 @@ void InfoSaver::print()
 {
     for(auto &file : files)
         qDebug() << file.getFullpath();
+}
+
+QStringList InfoSaver::toQStringList()
+{
+    QStringList list;
+    for (auto &file : files)
+        list.append(file.getFullpath());
+    return list;
 }
 
 

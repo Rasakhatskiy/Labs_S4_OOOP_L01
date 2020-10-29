@@ -61,6 +61,12 @@ public:
      * \brief Prints list to debug console.
      */
     void print();
+
+    /*!
+     * \brief creates qstringlist of paths
+     * \return list of paths
+     */
+    QStringList toQStringList();
 };
 
 #endif // INFOSAVER_HPP

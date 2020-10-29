@@ -1,15 +1,36 @@
 #include "treemodel.hpp"
 
-void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
+void TreeModel::setupModelData(const QStringList &paths, TreeItem *parent)
 {
-    //du hast
+    for(auto &path : paths)
+    {
+        auto subStrings = path.split("/");
+        auto current = rootItem;
+        for (auto &subItem : subStrings)
+        {
+            auto index = current->findChildrenData(subItem);
+            if (index >= 0)
+            {
+                current = current->getChild(index);
+                continue;
+            }
+            else
+            {
+                QVector<QVariant> data { subItem };
+                auto child = new TreeItem(data, current);
+                current->appendChild(child);
+                current = child;
+                continue;
+            }
+        }
+    }
 }
 
-TreeModel::TreeModel(const QString &data, QObject *parent)
+TreeModel::TreeModel(const QStringList &data, QObject *parent)
     : QAbstractItemModel(parent)
 {
     rootItem = new TreeItem({tr("Title"), tr("Summary")});
-    setupModelData(data.split('\n'), rootItem);
+    setupModelData(data, rootItem);
 }
 
 TreeModel::~TreeModel()
@@ -91,8 +112,7 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
     return QAbstractItemModel::flags(index);
 }
 
-QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
-                               int role) const
+QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         return rootItem->getData(section);

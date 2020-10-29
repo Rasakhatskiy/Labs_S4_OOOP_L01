@@ -2,7 +2,7 @@
 
 void FileInfo::construct(const QFileInfo fileInfo)
 {
-    _fullpath = fileInfo.absolutePath();
+    _fullpath = fileInfo.absoluteFilePath();
     _dateOfCreation = fileInfo.birthTime();
     _dateOfModification = fileInfo.lastModified();
     _isFile = fileInfo.isFile();

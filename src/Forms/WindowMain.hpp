@@ -13,6 +13,7 @@
 #include <QFileDialog>
 #include <QProcess>
 #include "../InfoSaver/infosaver.hpp"
+#include "windowtree.hpp"
 
 QT_BEGIN_NAMESPACE
 /*! UI namespace*/
@@ -55,10 +56,5 @@ private:
      */
     QString isSourceValid();
 
-    /*!
-     * \brief Checks if result file already exists and asks user if he sure to rewrite.
-     * \return Result name if user agreed or file does not exist. Null if file axists and user not agreed.
-     */
-    QString isResultNameValid();
 };
 #endif // MAINWINDOW_HPP

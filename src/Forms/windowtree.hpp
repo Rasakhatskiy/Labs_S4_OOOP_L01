@@ -2,6 +2,7 @@
 #define WINDOWTREE_HPP
 
 #include <QDialog>
+#include "../Tree/treemodel.hpp"
 
 namespace Ui {
 class WindowTree;

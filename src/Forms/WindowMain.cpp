@@ -64,8 +64,36 @@ void MainWindow::on_button_browseSaveAs_clicked()
     dialog_saveAs.setWindowTitle("Save as");
     dialog_saveAs.setNameFilter(tr("Binary file (*.bin *.data *.img)"));
     dialog_saveAs.setViewMode(QFileDialog::Detail);
-    if (dialog_saveAs.exec())
-        ui->lineEdit_pathSaveFileInfo->setText(dialog_saveAs.selectedFiles()[0]);
+
+    QString resultPath =
+            dialog_saveAs.exec() ?
+            dialog_saveAs.selectedFiles()[0] :
+            NULL;
+
+    auto sourcePath = isSourceValid();
+
+    if (sourcePath == NULL ||
+        resultPath == NULL)
+        return;
+
+
+    if (QFile::exists(resultPath))
+    {
+        if (QMessageBox::warning(
+                    this,
+                    "Invalid input",
+                    "File " + resultPath + " already exists. Overwrite it?",
+                    QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
+            QFile::remove(resultPath);
+        else
+            return;
+    }
+
+    auto infoSaver = InfoSaver();
+    infoSaver.scan(sourcePath);
+    infoSaver.save(resultPath);
+    auto window = new WindowTree(infoSaver.toQStringList(), this);
+    window->show();
 }
 
 void MainWindow::on_button_browseModifyFile_clicked()
@@ -82,16 +110,7 @@ void MainWindow::on_button_browseModifyFile_clicked()
 
 void MainWindow::on_button_startCreateFilesystem_clicked()
 {
-    auto sourcePath = isSourceValid();
-    auto resultPath = isResultNameValid();
 
-    if (sourcePath == NULL ||
-        resultPath == NULL)
-        return;
-
-    auto infoSaver = InfoSaver();
-    infoSaver.scan(sourcePath);
-    infoSaver.save(resultPath);
 }
 
 QString MainWindow::isSourceValid()
@@ -115,28 +134,4 @@ QString MainWindow::isSourceValid()
     }
 
     return sourcePath;
-}
-
-QString MainWindow::isResultNameValid()
-{
-    auto resultName = ui->lineEdit_pathSaveFileInfo->text();
-    if (QFileInfo(resultName).exists())
-    {
-        auto result = QMessageBox::warning(
-            this,
-            "Invalid input",
-            "File " + resultName + " already exists. Overwrite it?",
-            QMessageBox::Yes|QMessageBox::No);
-
-        if (result == QMessageBox::Yes)
-        {
-            // delete file
-            QFile::remove(resultName);
-        }
-        else
-        {
-            return NULL;
-        }
-    }
-    return resultName;
 }

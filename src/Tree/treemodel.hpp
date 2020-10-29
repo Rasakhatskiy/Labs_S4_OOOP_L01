@@ -20,7 +20,7 @@ public:
      * \param data[in] Data for constructing tree.
      * \param parent[in] Parent object.
      */
-    explicit TreeModel(const QString &data, QObject *parent = nullptr);
+    explicit TreeModel(const QStringList &data, QObject *parent = nullptr);
 
     /*! Destructor, deletes root */
     ~TreeModel();

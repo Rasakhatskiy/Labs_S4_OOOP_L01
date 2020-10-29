@@ -78,6 +78,13 @@ public:
      */
     TreeItem *getParent();
 
+    /*!
+     * \brief Checks if children contain data.
+     * \param[in] data
+     * \return Index of child if found, -1 if not.
+     */
+    int findChildrenData(const QVariant& data);
+
 };
 
 #endif // TREEITEM_HPP

@@ -53,3 +53,12 @@ TreeItem *TreeItem::getParent()
 {
     return _parent;
 }
+
+int TreeItem::findChildrenData(const QVariant &data)
+{
+    for (int i = 0; i < _children.count(); ++i)
+        if (_children[i]->getDataCount() != 0 &&
+            _children[i]->getData(0) == data)
+            return i;
+    return -1;
+}
