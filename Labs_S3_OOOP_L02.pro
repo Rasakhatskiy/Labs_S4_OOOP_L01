@@ -10,17 +10,24 @@ CONFIG += c++11
 
 SOURCES += \
     src/FileInfo/fileinfo.cpp \
+    src/Forms/windowtree.cpp \
     src/InfoSaver/infosaver.cpp \
+    src/Tree/treeitem.cpp \
+    src/Tree/treemodel.cpp \
     src/main.cpp \
     src/Forms/WindowMain.cpp
 
 HEADERS += \
     src/FileInfo/fileinfo.hpp \
     src/Forms/WindowMain.hpp \
-    src/InfoSaver/infosaver.hpp
+    src/Forms/windowtree.hpp \
+    src/Tree/treeitem.hpp \
+    src/Tree/treemodel.hpp \
+    src/InfoSaver/infosaver.hpp \
 
 FORMS += \
-    src/Forms/WindowMain.ui
+    src/Forms/WindowMain.ui \
+    src/Forms/windowtree.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

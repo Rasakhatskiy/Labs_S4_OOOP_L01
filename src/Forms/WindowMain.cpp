@@ -125,14 +125,13 @@ QString MainWindow::isResultNameValid()
         auto result = QMessageBox::warning(
             this,
             "Invalid input",
-            "File " + resultName + " already exists",
+            "File " + resultName + " already exists. Overwrite it?",
             QMessageBox::Yes|QMessageBox::No);
 
         if (result == QMessageBox::Yes)
         {
             // delete file
-            QFile file (resultName);
-            file.remove();
+            QFile::remove(resultName);
         }
         else
         {

@@ -16,7 +16,7 @@ class InfoSaver
 {
 private:
     /*! List of file info. */
-    QList<QFileInfo> files;
+    QList<FileInfo> files;
 public:
     /*! Default constructor. */
     InfoSaver();

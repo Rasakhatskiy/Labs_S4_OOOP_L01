@@ -149,7 +149,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Save as</string>
+       <string>Browse</string>
       </property>
      </widget>
     </item>
