@@ -11,6 +11,14 @@ struct DateTime
     minute,
     second;
 
+    DateTime():
+        year(0),
+        month(0),
+        day(0),
+        hour(0),
+        minute(0),
+        second(0){}
+
     DateTime(
             unsigned short year,
             unsigned short month,

@@ -10,91 +10,156 @@
 #include <QStorageInfo>
 
 #include <windows.h>
+#include <WinBase.h>
 #include <tchar.h>
 #include <strsafe.h>
 #include <fileapi.h>
 #include <timezoneapi.h>
 #include <SDKDDKVer.h>
+#include <AccCtrl.h>
+#include <AclAPI.h>
+#include "accctrl.h"
+#include "aclapi.h"
+#pragma comment(lib, "advapi32.lib")
 
 
-BOOL GetLastWriteTime(HANDLE hFile, LPTSTR lpszString, DWORD dwSize)
-{
-    FILETIME ftCreate, ftAccess, ftWrite;
-    SYSTEMTIME stUTC, stLocal;
-    DWORD dwRet;
+#pragma comment(lib,"user32.lib")
 
-    // Retrieve the file times for the file.
-    if (!GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite))
-        return FALSE;
-
-    // Convert the last-write time to local time.
-    FileTimeToSystemTime(&ftWrite, &stUTC);
-    SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
-
-    qDebug() << "Created on: "
-             << stUTC.wDay
-             << stUTC.wMonth
-             << stUTC.wYear
-             << stUTC.wHour
-             << stUTC.wMinute;
-
-    // Build a string showing the date and time.
-    dwRet = StringCchPrintf(lpszString, dwSize,
-        TEXT("%02d/%02d/%d  %02d:%02d"),
-        stLocal.wMonth, stLocal.wDay, stLocal.wYear,
-        stLocal.wHour, stLocal.wMinute);
-
-    if( S_OK == dwRet )
-        return TRUE;
-    else return FALSE;
-}
 
 /*! Main app function. Creates main form and sets stylesheet.*/
 int main(int argc, char *argv[])
 {
-
-//    auto file = CreateFileA(
-//                "D:\\Results.txt",
-//                GENERIC_READ,
-//                FILE_SHARE_WRITE,
-//                0,
-//                OPEN_EXISTING,
-//                0x02000000,
-//                0);
-
-
+    DWORD dwRtnCode = 0;
+    PSID pSidOwner = NULL;
+    BOOL bRtnBool = TRUE;
+    LPTSTR AcctName = NULL;
+    LPTSTR DomainName = NULL;
+    DWORD dwAcctName = 1, dwDomainName = 1;
+    SID_NAME_USE eUse = SidTypeUnknown;
     HANDLE hFile;
-    TCHAR szBuf[MAX_PATH];
+    PSECURITY_DESCRIPTOR pSD = NULL;
 
-//    if( argc != 2 )
-//    {
-//        printf("This sample takes a file name as a parameter\n");
-//        return 0;
-//    }
+
+    // Get the handle of the file object.
     hFile = CreateFile(
-            L"D:\\Results.txt",
-            GENERIC_READ,
-            FILE_SHARE_READ,
-            NULL,
-            OPEN_EXISTING,
-            0,
-            NULL);
+        TEXT("D:\\Results.txt"),
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        NULL,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL);
 
-    if(hFile == INVALID_HANDLE_VALUE)
+    // Check GetLastError for CreateFile error code.
+    if (hFile == INVALID_HANDLE_VALUE)
     {
-        qDebug() << "CreateFile failed with\n" << GetLastError();
-        return 0;
+        DWORD dwErrorCode = 0;
+
+        dwErrorCode = GetLastError();
+        //_tprintf(TEXT("CreateFile error = %d\n"), dwErrorCode);
+        return -1;
     }
-    if(GetLastWriteTime( hFile, szBuf, MAX_PATH ))
+
+
+
+    // Get the owner SID of the file.
+    dwRtnCode = GetSecurityInfo(
+        hFile,
+        SE_FILE_OBJECT,
+        OWNER_SECURITY_INFORMATION,
+        &pSidOwner,
+        NULL,
+        NULL,
+        NULL,
+        &pSD);
+
+    // Check GetLastError for GetSecurityInfo error condition.
+    if (dwRtnCode != ERROR_SUCCESS)
     {
-        QString s = (LPSTR)szBuf;
-        qDebug() << "Last write time is: " << szBuf;
+        DWORD dwErrorCode = 0;
+
+        dwErrorCode = GetLastError();
+        _tprintf(TEXT("GetSecurityInfo error = %d\n"), dwErrorCode);
+        return -1;
     }
 
-    CloseHandle(hFile);
+    // First call to LookupAccountSid to get the buffer sizes.
+    bRtnBool = LookupAccountSid(
+        NULL,           // local computer
+        pSidOwner,
+        AcctName,
+        (LPDWORD)&dwAcctName,
+        DomainName,
+        (LPDWORD)&dwDomainName,
+        &eUse);
 
+    // Reallocate memory for the buffers.
+    AcctName = (LPTSTR)GlobalAlloc(
+        GMEM_FIXED,
+        dwAcctName);
 
-    //qDebug() << lpszString;
+    // Check GetLastError for GlobalAlloc error condition.
+    if (AcctName == NULL)
+    {
+        DWORD dwErrorCode = 0;
+
+        dwErrorCode = GetLastError();
+        //_tprintf(TEXT("GlobalAlloc error = %d\n"), dwErrorCode);
+        return -1;
+    }
+
+    DomainName = (LPTSTR)GlobalAlloc(
+           GMEM_FIXED,
+           dwDomainName);
+
+    // Check GetLastError for GlobalAlloc error condition.
+    if (DomainName == NULL)
+    {
+        DWORD dwErrorCode = 0;
+
+        dwErrorCode = GetLastError();
+        //_tprintf(TEXT("GlobalAlloc error = %d\n"), dwErrorCode);
+        return -1;
+
+    }
+
+    // Second call to LookupAccountSid to get the account name.
+    bRtnBool = LookupAccountSid(
+        NULL,                   // name of local or remote computer
+        pSidOwner,              // security identifier
+        AcctName,               // account name buffer
+        (LPDWORD)&dwAcctName,   // size of account name buffer
+        DomainName,             // domain name
+        (LPDWORD)&dwDomainName, // size of domain name buffer
+        &eUse);                 // SID type
+
+    // Check GetLastError for LookupAccountSid error condition.
+    if (bRtnBool == FALSE)
+    {
+        DWORD dwErrorCode = 0;
+
+        dwErrorCode = GetLastError();
+
+        if (dwErrorCode == ERROR_NONE_MAPPED)
+          _tprintf(TEXT
+              ("Account owner not found for specified SID.\n"));
+        else
+          _tprintf(TEXT("Error in LookupAccountSid.\n"));
+        return -1;
+
+    }
+    else
+    if (bRtnBool == TRUE)
+        // Print the account name.
+        //_tprintf(TEXT("Account owner = %s\n"), AcctName);
+    {
+        auto str = QString::fromWCharArray(AcctName);
+        qDebug() << str;
+
+    }
+
+    return 0;
+
 
     // Create main window
     QApplication a(argc, argv);
