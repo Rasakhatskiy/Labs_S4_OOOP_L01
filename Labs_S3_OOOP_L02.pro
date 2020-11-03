@@ -10,6 +10,8 @@ CONFIG += c++11
 
 SOURCES += \
     src/FileInfo/fileinfo.cpp \
+    src/FileInfo/metadata.cpp \
+    src/Forms/windowmetadata.cpp \
     src/Forms/windowtree.cpp \
     src/InfoSaver/infosaver.cpp \
     src/Tree/treeitem.cpp \
@@ -18,8 +20,11 @@ SOURCES += \
     src/Forms/WindowMain.cpp
 
 HEADERS += \
+    src/FileInfo/DateTime.hpp \
     src/FileInfo/fileinfo.hpp \
+    src/FileInfo/metadata.hpp \
     src/Forms/WindowMain.hpp \
+    src/Forms/windowmetadata.hpp \
     src/Forms/windowtree.hpp \
     src/Tree/treeitem.hpp \
     src/Tree/treemodel.hpp \
@@ -27,6 +32,7 @@ HEADERS += \
 
 FORMS += \
     src/Forms/WindowMain.ui \
+    src/Forms/windowmetadata.ui \
     src/Forms/windowtree.ui
 
 # Default rules for deployment.
