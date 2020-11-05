@@ -103,13 +103,27 @@ QTreeView::item:selected
 }
 
 QTreeView::branch:has-children:!has-siblings:closed,
-QTreeView::branch:closed:has-children:has-siblings {
-        border-image: none;
-        image: url(:/res/Forms/stylesheet-branch-closed.png);
+QTreeView::branch:closed:has-children:has-siblings
+{
+    border-image: none;
+    image: url(:/res/Forms/stylesheet-branch-closed.png);
 }
 
 QTreeView::branch:open:has-children:!has-siblings,
-QTreeView::branch:open:has-children:has-siblings  {
-        border-image: none;
-        image: url(:/res/Forms/stylesheet-branch-open.png);
+QTreeView::branch:open:has-children:has-siblings
+{
+    border-image: none;
+    image: url(:/res/Forms/stylesheet-branch-open.png);
+}
+
+QDateTimeEdit
+{
+    color: rgb(241, 241, 241);
+    background-color: rgb(63, 63, 70);
+}
+
+QSpinBox
+{
+    color: rgb(241, 241, 241);
+    background-color: rgb(63, 63, 70);
 }

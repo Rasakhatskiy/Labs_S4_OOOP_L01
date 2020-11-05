@@ -4,6 +4,7 @@
 #include <QString>
 #include <QPair>
 #include <QDateTime>
+#include <QFileInfo>
 
 #include <windows.h>
 #include <WinBase.h>

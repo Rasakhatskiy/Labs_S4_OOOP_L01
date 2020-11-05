@@ -164,10 +164,17 @@ QString Metadata::getOwner(HANDLE hFile)
 Metadata::Metadata(const QString& path)
 {
     auto handle = openFileRead(path);
+
     auto times = getTime(handle);
     dateTimeCreation = times.first;
     dateTimeModification = times.second;
+
     owner = getOwner(handle);
+
+    auto info = QFileInfo(path);
+    length = info.size();
+
+    extension = info.completeSuffix();
 }
 
 Metadata::Metadata(
