@@ -12,7 +12,7 @@ HANDLE Metadata::openFileRead(const QString &path)
         NULL);
 }
 
-QPair<DateTime, DateTime> Metadata::getTime(HANDLE hFile)
+QPair<QDateTime, QDateTime> Metadata::getTime(HANDLE hFile)
 {
     FILETIME ftCreate, ftAccess, ftWrite;
     SYSTEMTIME stCreationUTC, stModificationUTC;
@@ -20,7 +20,7 @@ QPair<DateTime, DateTime> Metadata::getTime(HANDLE hFile)
 
     // Retrieve the file times for the file.
     if (!GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite))
-        return QPair<DateTime, DateTime>();
+        return QPair<QDateTime, QDateTime>();
 
     // Convert the last-write time to local time.
     FileTimeToSystemTime(&ftCreate, &stCreationUTC);
@@ -29,23 +29,27 @@ QPair<DateTime, DateTime> Metadata::getTime(HANDLE hFile)
     FileTimeToSystemTime(&ftWrite, &stModificationUTC);
     //SystemTimeToTzSpecificLocalTime(NULL, &stModificationUTC, &stLocalModify);
 
-    DateTime dateCreation(
-        stCreationUTC.wYear,
-        stCreationUTC.wMonth,
-        stCreationUTC.wDay,
-        stCreationUTC.wHour,
-        stCreationUTC.wMinute,
-        stCreationUTC.wSecond);
+    QDateTime dateCreation(
+        QDate(
+            stCreationUTC.wYear,
+            stCreationUTC.wMonth,
+            stCreationUTC.wDay),
+        QTime(
+            stCreationUTC.wHour,
+            stCreationUTC.wMinute,
+            stCreationUTC.wSecond));
 
-    DateTime dateModification(
-        stModificationUTC.wYear,
-        stModificationUTC.wMonth,
-        stModificationUTC.wDay,
-        stModificationUTC.wHour,
-        stModificationUTC.wMinute,
-        stModificationUTC.wSecond);
+    QDateTime dateModification(
+        QDate(
+            stModificationUTC.wYear,
+            stModificationUTC.wMonth,
+            stModificationUTC.wDay),
+        QTime(
+            stModificationUTC.wHour,
+            stModificationUTC.wMinute,
+            stModificationUTC.wSecond));
 
-    return QPair<DateTime, DateTime>(dateCreation, dateModification);
+    return QPair<QDateTime, QDateTime>(dateCreation, dateModification);
 }
 
 QString Metadata::getOwner(HANDLE hFile)
@@ -163,11 +167,12 @@ Metadata::Metadata(const QString& path)
     auto times = getTime(handle);
     dateTimeCreation = times.first;
     dateTimeModification = times.second;
+    owner = getOwner(handle);
 }
 
 Metadata::Metadata(
-        const DateTime& dateTimeCreation,
-        const DateTime& dateTimeModification,
+        const QDateTime& dateTimeCreation,
+        const QDateTime& dateTimeModification,
         const uint64_t& length,
         const QString& owner,
         const QString& extension)

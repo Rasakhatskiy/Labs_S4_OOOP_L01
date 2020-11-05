@@ -20,7 +20,6 @@ SOURCES += \
     src/Forms/WindowMain.cpp
 
 HEADERS += \
-    src/FileInfo/DateTime.hpp \
     src/FileInfo/fileinfo.hpp \
     src/FileInfo/metadata.hpp \
     src/Forms/WindowMain.hpp \

@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QPair>
+#include <QDateTime>
 
 #include <windows.h>
 #include <WinBase.h>
@@ -18,18 +19,17 @@
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib,"user32.lib")
 
-#include "DateTime.hpp"
 
 class Metadata
 {
 private:
     HANDLE openFileRead(const QString& path);
-    QPair<DateTime, DateTime> getTime(HANDLE hFile);
+    QPair<QDateTime, QDateTime> getTime(HANDLE hFile);
     QString getOwner(HANDLE hFile);
 
 public:
-    DateTime dateTimeCreation;
-    DateTime dateTimeModification;
+    QDateTime dateTimeCreation;
+    QDateTime dateTimeModification;
     uint64_t length;
     QString owner;
     QString extension;
@@ -37,8 +37,8 @@ public:
 
     Metadata(const QString& path);
     Metadata(
-        const DateTime& dateTimeCreation,
-        const DateTime& dateTimeModification,
+        const QDateTime& dateTimeCreation,
+        const QDateTime& dateTimeModification,
         const uint64_t& length,
         const QString& owner,
         const QString& extension);
