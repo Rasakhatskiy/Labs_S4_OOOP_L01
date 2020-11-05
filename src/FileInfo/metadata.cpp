@@ -50,12 +50,119 @@ QPair<DateTime, DateTime> Metadata::getTime(HANDLE hFile)
 
 QString Metadata::getOwner(HANDLE hFile)
 {
+    DWORD dwRtnCode = 0;
+    PSID pSidOwner = NULL;
+    BOOL bRtnBool = TRUE;
+    LPTSTR AcctName = NULL;
+    LPTSTR DomainName = NULL;
+    DWORD dwAcctName = 1, dwDomainName = 1;
+    SID_NAME_USE eUse = SidTypeUnknown;
+    PSECURITY_DESCRIPTOR pSD = NULL;
 
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+//        DWORD dwErrorCode = 0;
+//        dwErrorCode = GetLastError();
+//        _tprintf(TEXT("CreateFile error = %d\n"), dwErrorCode);
+        return QString();
+    }
+
+    // Get the owner SID of the file.
+    dwRtnCode = GetSecurityInfo(
+        hFile,
+        SE_FILE_OBJECT,
+        OWNER_SECURITY_INFORMATION,
+        &pSidOwner,
+        NULL,
+        NULL,
+        NULL,
+        &pSD);
+
+    // Check GetLastError for GetSecurityInfo error condition.
+    if (dwRtnCode != ERROR_SUCCESS)
+    {
+//        DWORD dwErrorCode = 0;
+//        dwErrorCode = GetLastError();
+//        _tprintf(TEXT("GetSecurityInfo error = %d\n"), dwErrorCode);
+        return QString();
+    }
+
+    // First call to LookupAccountSid to get the buffer sizes.
+    bRtnBool = LookupAccountSid(
+        NULL,           // local computer
+        pSidOwner,
+        AcctName,
+        (LPDWORD)&dwAcctName,
+        DomainName,
+        (LPDWORD)&dwDomainName,
+        &eUse);
+
+    // Reallocate memory for the buffers.
+    AcctName = (LPTSTR)GlobalAlloc(
+        GMEM_FIXED,
+        dwAcctName);
+
+    // Check GetLastError for GlobalAlloc error condition.
+    if (AcctName == NULL)
+    {
+//        DWORD dwErrorCode = 0;
+//        dwErrorCode = GetLastError();
+//        _tprintf(TEXT("GlobalAlloc error = %d\n"), dwErrorCode);
+        return QString();
+    }
+
+    DomainName = (LPTSTR)GlobalAlloc(
+           GMEM_FIXED,
+           dwDomainName);
+
+    // Check GetLastError for GlobalAlloc error condition.
+    if (DomainName == NULL)
+    {
+//        DWORD dwErrorCode = 0;
+//        dwErrorCode = GetLastError();
+//        _tprintf(TEXT("GlobalAlloc error = %d\n"), dwErrorCode);
+        return QString();
+
+    }
+
+    // Second call to LookupAccountSid to get the account name.
+    bRtnBool = LookupAccountSid(
+        NULL,                   // name of local or remote computer
+        pSidOwner,              // security identifier
+        AcctName,               // account name buffer
+        (LPDWORD)&dwAcctName,   // size of account name buffer
+        DomainName,             // domain name
+        (LPDWORD)&dwDomainName, // size of domain name buffer
+        &eUse);                 // SID type
+
+    // Check GetLastError for LookupAccountSid error condition.
+    if (bRtnBool == FALSE)
+    {
+//        DWORD dwErrorCode = 0;
+//        dwErrorCode = GetLastError();
+//        if (dwErrorCode == ERROR_NONE_MAPPED)
+//          _tprintf(TEXT
+//              ("Account owner not found for specified SID.\n"));
+//        else
+//          _tprintf(TEXT("Error in LookupAccountSid.\n"));
+        return QString();
+
+    }
+    else
+    if (bRtnBool == TRUE)
+    {
+        return QString::fromWCharArray(AcctName);
+    }
+
+    return QString();
 }
 
 Metadata::Metadata(const QString& path)
 {
-
+    auto handle = openFileRead(path);
+    auto times = getTime(handle);
+    dateTimeCreation = times.first;
+    dateTimeModification = times.second;
 }
 
 Metadata::Metadata(

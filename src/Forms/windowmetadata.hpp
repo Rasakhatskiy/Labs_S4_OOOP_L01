@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "../FileInfo/metadata.hpp"
+
 namespace Ui {
 class WindowMetadata;
 }
@@ -12,7 +14,7 @@ class WindowMetadata : public QDialog
     Q_OBJECT
 
 public:
-    explicit WindowMetadata(QWidget *parent = nullptr);
+    explicit WindowMetadata(const QString& path, QWidget *parent = nullptr);
     ~WindowMetadata();
 
 private slots:
@@ -20,6 +22,7 @@ private slots:
 
 private:
     Ui::WindowMetadata *ui;
+    void setMetaData(const Metadata& metadata);
 };
 
 #endif // WINDOWMETADATA_HPP

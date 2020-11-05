@@ -5,11 +5,18 @@
 #include <QPair>
 
 #include <windows.h>
+#include <WinBase.h>
 #include <tchar.h>
 #include <strsafe.h>
 #include <fileapi.h>
 #include <timezoneapi.h>
 #include <SDKDDKVer.h>
+#include <AccCtrl.h>
+#include <AclAPI.h>
+#include "accctrl.h"
+#include "aclapi.h"
+#pragma comment(lib, "advapi32.lib")
+#pragma comment(lib,"user32.lib")
 
 #include "DateTime.hpp"
 

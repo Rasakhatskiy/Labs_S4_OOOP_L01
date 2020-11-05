@@ -1,6 +1,8 @@
+#include <memory>
+
 #include "WindowMain.hpp"
 #include "ui_WindowMain.h"
-
+#include "windowmetadata.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -98,14 +100,7 @@ void MainWindow::on_button_browseSaveAs_clicked()
 
 void MainWindow::on_button_browseModifyFile_clicked()
 {
-    QFileDialog dialog_saveAs(this);
-    dialog_saveAs.setFileMode(QFileDialog::ExistingFile);
-    dialog_saveAs.setDirectory("D:\\");
-    dialog_saveAs.setWindowTitle("Save as");
-    dialog_saveAs.setNameFilter(tr("Binary file (*.bin *.data *.img)"));
-    dialog_saveAs.setViewMode(QFileDialog::Detail);
-    if (dialog_saveAs.exec())
-        ui->lineEdit_pathModifyMetadata->setText(dialog_saveAs.selectedFiles()[0]);
+
 }
 
 void MainWindow::on_button_startCreateFilesystem_clicked()
@@ -134,4 +129,19 @@ QString MainWindow::isSourceValid()
     }
 
     return sourcePath;
+}
+
+void MainWindow::on_button_startEditMetadata_clicked()
+{
+    QFileDialog dialog_saveAs(this);
+    dialog_saveAs.setFileMode(QFileDialog::ExistingFile);
+    dialog_saveAs.setDirectory("D:\\");
+    dialog_saveAs.setWindowTitle("Open  file");
+    dialog_saveAs.setNameFilter(tr("Any file (*)"));
+    dialog_saveAs.setViewMode(QFileDialog::Detail);
+    if (!dialog_saveAs.exec())
+        return;
+    auto path = dialog_saveAs.selectedFiles()[0];
+    auto modifyWindow = /*std::unique_ptr<WindowMetadata>(*/new WindowMetadata(path)/*)*/;
+    modifyWindow->show();
 }

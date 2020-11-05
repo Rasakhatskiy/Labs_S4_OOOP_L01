@@ -43,6 +43,8 @@ private slots:
 
     void on_button_startCreateFilesystem_clicked();
 
+    void on_button_startEditMetadata_clicked();
+
 private:
     /*! Pointer to user interface of the form.*/
     Ui::MainWindow *ui;
