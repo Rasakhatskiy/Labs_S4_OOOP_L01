@@ -12,6 +12,18 @@ HANDLE Metadata::openFileRead(const QString &path)
         NULL);
 }
 
+HANDLE Metadata::openFileWrite(const QString &path)
+{
+    return CreateFile(
+        path.toStdWString().c_str(),
+        FILE_GENERIC_WRITE,
+        FILE_SHARE_WRITE,
+        NULL,
+        OPEN_EXISTING,
+        0,
+        NULL);
+}
+
 QPair<QDateTime, QDateTime> Metadata::getTime(HANDLE hFile)
 {
     FILETIME ftCreate, ftAccess, ftWrite;
@@ -50,6 +62,28 @@ QPair<QDateTime, QDateTime> Metadata::getTime(HANDLE hFile)
             stModificationUTC.wSecond));
 
     return QPair<QDateTime, QDateTime>(dateCreation, dateModification);
+}
+
+bool Metadata::setTime(HANDLE hFile, QPair<QDateTime, QDateTime> pair)
+{
+    SYSTEMTIME timeCreation = dateTimeFromQDateTime(pair.first);
+    SYSTEMTIME timeModification = dateTimeFromQDateTime(pair.second);
+    SYSTEMTIME timeAccess;
+
+    GetSystemTime(&timeAccess);
+
+    FILETIME ftCreate, ftAccess, ftWrite;
+
+    SystemTimeToFileTime(&timeCreation, &ftCreate);
+    SystemTimeToFileTime(&timeModification, &ftWrite);
+    SystemTimeToFileTime(&timeAccess, &ftAccess);
+
+    return SetFileTime(
+        hFile,
+        &ftCreate,
+        &ftAccess,
+        &ftWrite);
+
 }
 
 QString Metadata::getOwner(HANDLE hFile)
@@ -161,20 +195,44 @@ QString Metadata::getOwner(HANDLE hFile)
     return QString();
 }
 
+bool Metadata::save(const QString &path)
+{
+    auto handle = openFileWrite(path);
+    if (!setTime(
+        handle,
+        QPair<QDateTime, QDateTime>(
+            dateTimeCreation,
+            dateTimeModification)))
+        return false;
+
+
+    CloseHandle(handle);
+    return true;
+}
+
 Metadata::Metadata(const QString& path)
 {
     auto handle = openFileRead(path);
 
-    auto times = getTime(handle);
-    dateTimeCreation = times.first;
-    dateTimeModification = times.second;
+    if (handle)
+    {
+        auto times = getTime(handle);
+        dateTimeCreation = times.first;
+        dateTimeModification = times.second;
 
-    owner = getOwner(handle);
+        owner = getOwner(handle);
 
-    auto info = QFileInfo(path);
-    length = info.size();
+        auto info = QFileInfo(path);
+        length = info.size();
 
-    extension = info.completeSuffix();
+        extension = info.completeSuffix();
+
+        CloseHandle(handle);
+    }
+    else
+    {
+        throw std::invalid_argument("Cannot open file");
+    }
 }
 
 Metadata::Metadata(
@@ -190,3 +248,15 @@ Metadata::Metadata(
            owner(owner),
            extension(extension)
 {}
+
+SYSTEMTIME Metadata::dateTimeFromQDateTime(const QDateTime &dateTime)
+{
+    SYSTEMTIME timeCreation;
+    timeCreation.wYear = dateTime.date().year();
+    timeCreation.wMonth = dateTime.date().month();
+    timeCreation.wDay = dateTime.date().day();
+    timeCreation.wHour = dateTime.time().hour();
+    timeCreation.wMinute = dateTime.time().minute();
+    timeCreation.wSecond = dateTime.time().second();
+    return timeCreation;
+}
