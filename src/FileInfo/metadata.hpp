@@ -19,6 +19,7 @@
 #include <AclAPI.h>
 #include "accctrl.h"
 #include "aclapi.h"
+#include <sddl.h>
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib,"user32.lib")
 
@@ -28,9 +29,12 @@ class Metadata
 private:
     HANDLE openFileRead(const QString& path);
     HANDLE openFileWrite(const QString& path);
+
     QPair<QDateTime, QDateTime> getTime(HANDLE hFile);
     bool setTime(HANDLE hFile, QPair<QDateTime, QDateTime> pair);
+
     QString getOwner(HANDLE hFile);
+    bool setOwner(HANDLE hFile, const QString& ownerName);
 public:
     QDateTime dateTimeCreation;
     QDateTime dateTimeModification;

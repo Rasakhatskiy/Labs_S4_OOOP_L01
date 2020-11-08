@@ -56,5 +56,13 @@ void WindowMetadata::on_button_save_clicked()
             this,
             "Saved",
             "Metadata written");
+        close();
+    }
+    else
+    {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Unable to write matadata");
     }
 }

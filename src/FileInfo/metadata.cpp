@@ -195,6 +195,23 @@ QString Metadata::getOwner(HANDLE hFile)
     return QString();
 }
 
+bool Metadata::setOwner(HANDLE hFile, const QString &ownerName)
+{
+    PSID sid;
+    ConvertStringSidToSid(ownerName.toStdWString().c_str(), &sid);
+
+    SetSecurityInfo(
+        hFile,
+        SE_FILE_OBJECT,
+        OWNER_SECURITY_INFORMATION,
+        &sid,
+        NULL,
+        NULL,
+        NULL);
+
+    return true;
+}
+
 bool Metadata::save(const QString &path)
 {
     auto handle = openFileWrite(path);
@@ -205,8 +222,16 @@ bool Metadata::save(const QString &path)
             dateTimeModification)))
         return false;
 
+    if (!setOwner(handle, owner))
+        return false;
+
 
     CloseHandle(handle);
+
+    QFileInfo info(path);
+    QString newPath = info.path() + info.baseName() + "." + extension;
+    QFile::rename(path, newPath);
+
     return true;
 }
 
