@@ -21,6 +21,11 @@ private slots:
 
 private:
     Ui::WindowTree *ui;
+
+    /*!
+     * \brief writes tree to tree model.
+     * \param data[in] File paths data to write to tree.
+     */
     void setupTree(const QStringList& data);
 };
 

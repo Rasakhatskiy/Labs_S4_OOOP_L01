@@ -20,12 +20,17 @@ public:
 
 private slots:
     void on_pushButton_cancel_clicked();
-
     void on_button_save_clicked();
 
 private:
     Ui::WindowMetadata *ui;
+    /*!
+     * \brief sets metadata to window fields.
+     * \param metadata[in] metadata to set.
+     */
     void setMetaData(const Metadata& metadata);
+
+    /*! Path of the read file.*/
     QString path;
 };
 
