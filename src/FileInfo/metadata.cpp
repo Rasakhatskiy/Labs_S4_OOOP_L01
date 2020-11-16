@@ -1,5 +1,44 @@
 #include "metadata.hpp"
 
+Metadata::Metadata(const QString& path)
+{
+    auto handle = openFileRead(path);
+
+    if (handle)
+    {
+        auto times = getTime(handle);
+        dateTimeCreation = times.first;
+        dateTimeModification = times.second;
+
+        owner = getOwner(handle);
+
+        auto info = QFileInfo(path);
+        length = info.size();
+
+        extension = info.completeSuffix();
+
+        CloseHandle(handle);
+    }
+    else
+    {
+        throw std::invalid_argument("Cannot open file");
+    }
+}
+
+Metadata::Metadata(
+        const QDateTime& dateTimeCreation,
+        const QDateTime& dateTimeModification,
+        const uint64_t& length,
+        const QString& owner,
+        const QString& extension)
+    :
+           dateTimeCreation(dateTimeCreation),
+           dateTimeModification(dateTimeModification),
+           length(length),
+           owner(owner),
+           extension(extension)
+{}
+
 HANDLE Metadata::openFileRead(const QString &path)
 {
     return CreateFile(
@@ -235,45 +274,6 @@ bool Metadata::save(const QString &path)
     return true;
 }
 
-Metadata::Metadata(const QString& path)
-{
-    auto handle = openFileRead(path);
-
-    if (handle)
-    {
-        auto times = getTime(handle);
-        dateTimeCreation = times.first;
-        dateTimeModification = times.second;
-
-        owner = getOwner(handle);
-
-        auto info = QFileInfo(path);
-        length = info.size();
-
-        extension = info.completeSuffix();
-
-        CloseHandle(handle);
-    }
-    else
-    {
-        throw std::invalid_argument("Cannot open file");
-    }
-}
-
-Metadata::Metadata(
-        const QDateTime& dateTimeCreation,
-        const QDateTime& dateTimeModification,
-        const uint64_t& length,
-        const QString& owner,
-        const QString& extension)
-    :
-           dateTimeCreation(dateTimeCreation),
-           dateTimeModification(dateTimeModification),
-           length(length),
-           owner(owner),
-           extension(extension)
-{}
-
 SYSTEMTIME Metadata::dateTimeFromQDateTime(const QDateTime &dateTime)
 {
     SYSTEMTIME timeCreation;
@@ -284,4 +284,41 @@ SYSTEMTIME Metadata::dateTimeFromQDateTime(const QDateTime &dateTime)
     timeCreation.wMinute = dateTime.time().minute();
     timeCreation.wSecond = dateTime.time().second();
     return timeCreation;
+}
+
+QStringList Metadata::doSearch(
+        const QString &startSearchPath,
+        const bool &isAND)
+{
+    QStringList result;
+
+    auto fileInfoScan = QFileInfo(startSearchPath);
+    if (!fileInfoScan.exists() ||
+        !fileInfoScan.isDir())
+        throw std::invalid_argument("Unable to open file " + startSearchPath.toStdString());
+
+    auto dirInfo = QDir(startSearchPath);
+    auto allFiles = dirInfo.entryList(
+       QDir::NoDotAndDotDot |
+       QDir::System |
+       QDir::Hidden  |
+       QDir::AllDirs |
+       QDir::Files,
+       QDir::DirsFirst);
+
+    for (auto &file : allFiles)
+    {
+        auto fileInfoTemp = QFileInfo(startSearchPath + "/" + file);
+        auto fullpath = fileInfoTemp.absoluteFilePath();
+        if (fileInfoTemp.isDir())
+        {
+            result.append(doSearch(startSearchPath, isAND));
+        }
+        else
+        {
+            ;
+        }
+
+    }
+    return result;
 }

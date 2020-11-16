@@ -49,8 +49,8 @@ void InfoSaver::scan(QString scanDirPath)
         !fileInfoScan.isDir())
         throw std::invalid_argument("Unable to open file " + scanDirPath.toStdString());
 
-   auto dirInfo = QDir(scanDirPath);
-   auto allFiles = dirInfo.entryList(
+    auto dirInfo = QDir(scanDirPath);
+    auto allFiles = dirInfo.entryList(
        QDir::NoDotAndDotDot |
        QDir::System |
        QDir::Hidden  |

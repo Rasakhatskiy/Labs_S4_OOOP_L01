@@ -5,6 +5,8 @@
 #include <QPair>
 #include <QDateTime>
 #include <QFileInfo>
+#include <QStringList>
+#include <QDir>
 
 #include <stdexcept>
 
@@ -55,7 +57,10 @@ private:
      * \param pair Pair of <Date of creation, Date of modification>.
      * \return true if write was successful.
      */
-    bool setTime(HANDLE hFile, QPair<QDateTime, QDateTime> pair);
+    bool setTime(
+        HANDLE hFile,
+        QPair<QDateTime,
+        QDateTime> pair);
 
     /*!
      * \brief gets name of owner from the file.
@@ -70,7 +75,15 @@ private:
      * \param ownerName[in] new owner name.
      * \return true if write was successful.
      */
-    bool setOwner(HANDLE hFile, const QString& ownerName);
+    bool setOwner(
+        HANDLE hFile,
+        const QString& ownerName);
+
+
+    bool matchesCriterion(
+        const QString& path,
+        const bool& isAND);
+
 public:
 
     /*! Date and time of creation.*/
@@ -123,6 +136,17 @@ public:
      * \return SYSTEMTIME datetime.
      */
     static SYSTEMTIME dateTimeFromQDateTime(const QDateTime& dateTime);
+
+    /*!
+     * \brief static function to search by this metadata.
+     * \param startSearchPath[in] Directory path to start searching.
+     * \param name[in] Name of the file to search, can be NULL - metadata search only.
+     * \param isAND[in] if true all metadata options should match, else at least one.
+     * \return list of found files paths.
+     */
+    static QStringList doSearch(
+        const QString& startSearchPath,
+        const bool& isAND);
 
 };
 

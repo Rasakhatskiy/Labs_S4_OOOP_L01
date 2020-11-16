@@ -39,11 +39,9 @@ private slots:
 
     void on_button_browseSaveAs_clicked();
 
-    void on_button_browseModifyFile_clicked();
-
-    void on_button_startCreateFilesystem_clicked();
-
     void on_button_startEditMetadata_clicked();
+
+    void on_button_SearchMetadata_clicked();
 
 private:
     /*! Pointer to user interface of the form.*/
@@ -57,6 +55,18 @@ private:
      * \return Source path if drive is valid, else null.
      */
     QString isSourceValid();
+
+    /*!
+     * \brief Calls OpenFileDialog and takes file path.
+     * \return Path if selected, else NULL.
+     */
+    QString CallOpenFileDialog();
+
+    /*!
+     * \brief Calls OpenFileDialog and takes file path.
+     * \return Path if selected, else NULL.
+     */
+    QString CallDirDialog();
 
 };
 #endif // MAINWINDOW_HPP

@@ -98,16 +98,6 @@ void MainWindow::on_button_browseSaveAs_clicked()
     window->show();
 }
 
-void MainWindow::on_button_browseModifyFile_clicked()
-{
-
-}
-
-void MainWindow::on_button_startCreateFilesystem_clicked()
-{
-
-}
-
 QString MainWindow::isSourceValid()
 {
     // Check if something if index valid. It must be valid
@@ -131,7 +121,7 @@ QString MainWindow::isSourceValid()
     return sourcePath;
 }
 
-void MainWindow::on_button_startEditMetadata_clicked()
+QString MainWindow::CallOpenFileDialog()
 {
     QFileDialog dialog_saveAs(this);
     dialog_saveAs.setFileMode(QFileDialog::ExistingFile);
@@ -140,8 +130,41 @@ void MainWindow::on_button_startEditMetadata_clicked()
     dialog_saveAs.setNameFilter(tr("Any file (*)"));
     dialog_saveAs.setViewMode(QFileDialog::Detail);
     if (!dialog_saveAs.exec())
-        return;
-    auto path = dialog_saveAs.selectedFiles()[0];
+        return NULL;
+    else
+        return dialog_saveAs.selectedFiles()[0];
+}
+
+QString MainWindow::CallDirDialog()
+{
+    QFileDialog dialog_saveAs(this);
+    dialog_saveAs.setFileMode(QFileDialog::DirectoryOnly);
+    dialog_saveAs.setDirectory("D:\\");
+    dialog_saveAs.setWindowTitle("Select directory");
+    dialog_saveAs.setViewMode(QFileDialog::Detail);
+    if (!dialog_saveAs.exec())
+        return NULL;
+    else
+        return dialog_saveAs.selectedFiles()[0];
+}
+
+void MainWindow::on_button_startEditMetadata_clicked()
+{
+
+    auto path = CallOpenFileDialog();
+    if (path == NULL) return;
     auto modifyWindow = /*std::unique_ptr<WindowMetadata>(*/new WindowMetadata(path)/*)*/;
     modifyWindow->show();
+}
+
+void MainWindow::on_button_SearchMetadata_clicked()
+{
+    auto path = CallDirDialog();
+    if (path == NULL)
+        return;
+
+
+
+
+
 }
