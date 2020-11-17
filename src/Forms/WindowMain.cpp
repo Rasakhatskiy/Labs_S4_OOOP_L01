@@ -153,7 +153,7 @@ void MainWindow::on_button_startEditMetadata_clicked()
 
     auto path = CallOpenFileDialog();
     if (path == NULL) return;
-    auto modifyWindow = /*std::unique_ptr<WindowMetadata>(*/new WindowMetadata(path)/*)*/;
+    auto modifyWindow = new WindowMetadata(path);
     modifyWindow->show();
 }
 
@@ -163,8 +163,6 @@ void MainWindow::on_button_SearchMetadata_clicked()
     if (path == NULL)
         return;
 
-
-
-
-
+    auto window = new WindowMetadataSearch(path, false, this);
+    window->show();
 }

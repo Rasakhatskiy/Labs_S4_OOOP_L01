@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QDir>
+#include <QDebug>
 
 #include <stdexcept>
 
@@ -144,7 +145,7 @@ public:
      * \param isAND[in] if true all metadata options should match, else at least one.
      * \return list of found files paths.
      */
-    static QStringList doSearch(
+    QStringList doSearch(
         const QString& startSearchPath,
         const bool& isAND);
 

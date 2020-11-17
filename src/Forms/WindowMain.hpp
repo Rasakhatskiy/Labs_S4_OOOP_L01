@@ -14,6 +14,7 @@
 #include <QProcess>
 #include "../InfoSaver/infosaver.hpp"
 #include "windowtree.hpp"
+#include "windowmetadatasearch.hpp"
 
 QT_BEGIN_NAMESPACE
 /*! UI namespace*/

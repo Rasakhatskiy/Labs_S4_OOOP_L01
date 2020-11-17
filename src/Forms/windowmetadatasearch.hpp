@@ -6,6 +6,7 @@
 #include <QStringList>
 
 #include "../FileInfo/metadata.hpp"
+#include "windowtree.hpp"
 
 namespace Ui {
 class WindowMetadataSearch;
@@ -25,9 +26,9 @@ public:
 private slots:
     void on_button_search_clicked();
 
-private:
-    QStringList search(QString scanDirPath);
+    void on_pushButton_cancel_clicked();
 
+private:
     Ui::WindowMetadataSearch *ui;
     QString path;
     bool isAND;

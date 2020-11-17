@@ -28,9 +28,12 @@ void WindowMetadataSearch::on_button_search_clicked()
         ui->lineEdit_extension->text());
 
     auto result = toSearch.doSearch(path, isAND);
+
+    auto window = new WindowTree(result, this);
+    window->show();
 }
 
-QStringList WindowMetadataSearch::search(QString scanDirPath)
+void WindowMetadataSearch::on_pushButton_cancel_clicked()
 {
-
+    close();
 }

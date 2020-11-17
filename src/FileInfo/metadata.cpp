@@ -290,8 +290,6 @@ QStringList Metadata::doSearch(
         const QString &startSearchPath,
         const bool &isAND)
 {
-    QStringList result;
-
     auto fileInfoScan = QFileInfo(startSearchPath);
     if (!fileInfoScan.exists() ||
         !fileInfoScan.isDir())
@@ -306,19 +304,42 @@ QStringList Metadata::doSearch(
        QDir::Files,
        QDir::DirsFirst);
 
+    QStringList result;
     for (auto &file : allFiles)
     {
         auto fileInfoTemp = QFileInfo(startSearchPath + "/" + file);
         auto fullpath = fileInfoTemp.absoluteFilePath();
+        qDebug() << fullpath;
         if (fileInfoTemp.isDir())
-        {
-            result.append(doSearch(startSearchPath, isAND));
-        }
+            result.append(doSearch(fullpath, isAND));
         else
-        {
-            ;
-        }
-
+            if (matchesCriterion(fullpath, isAND))
+                result.append(fullpath);
     }
     return result;
+}
+
+bool Metadata::matchesCriterion(
+        const QString& path,
+        const bool& isAND)
+{
+    auto info = QFileInfo(path);
+    auto file = openFileRead(path);
+    auto dates = getTime(file);
+    auto owner = getOwner(file);
+    CloseHandle(file);
+    if (isAND)
+        return
+            (this->dateTimeCreation == dates.first) &&
+            (this->dateTimeModification == dates.second) &&
+            ((qint64)this->length == info.size()) &&
+            (this->owner == owner) &&
+            (this->extension == info.completeSuffix());
+    else
+        return
+            (this->dateTimeCreation == dates.first) ||
+            (this->dateTimeModification == dates.second) ||
+            ((qint64)this->length == info.size()) ||
+            (this->owner == owner) ||
+            (this->extension == info.completeSuffix());
 }
