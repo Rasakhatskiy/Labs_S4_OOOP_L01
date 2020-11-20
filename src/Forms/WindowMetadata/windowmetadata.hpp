@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QMessageBox>
 
-#include "../FileInfo/metadata.hpp"
+#include "../../FileInfo/metadata.hpp"
 
 namespace Ui {
 class WindowMetadata;

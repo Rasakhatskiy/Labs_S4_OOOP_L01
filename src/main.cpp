@@ -1,4 +1,4 @@
-#include "Forms/WindowMain.hpp"
+#include "Forms/WindowMain/WindowMain.hpp"
 #include "InfoSaver/infosaver.hpp"
 
 #include <QApplication>

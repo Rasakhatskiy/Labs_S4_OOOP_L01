@@ -5,8 +5,8 @@
 #include <QDir>
 #include <QStringList>
 
-#include "../FileInfo/metadata.hpp"
-#include "windowtree.hpp"
+#include "../../FileInfo/metadata.hpp"
+#include "../WindowTree/windowtree.hpp"
 
 namespace Ui {
 class WindowMetadataSearch;

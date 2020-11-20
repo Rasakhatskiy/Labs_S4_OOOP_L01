@@ -2,7 +2,7 @@
 
 #include "WindowMain.hpp"
 #include "ui_WindowMain.h"
-#include "windowmetadata.hpp"
+#include "../WindowMetadata/windowmetadata.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
