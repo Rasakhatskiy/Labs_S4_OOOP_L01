@@ -9,6 +9,12 @@ void FileInfo::construct(const QFileInfo fileInfo)
     _isSymLink = fileInfo.isSymLink();
     _symlinkPath = fileInfo.symLinkTarget();
     _isDir = fileInfo.isDir();
+    _length = fileInfo.size();
+}
+
+FileInfo::FileInfo()
+{
+
 }
 
 FileInfo::FileInfo(QString fullpath)
@@ -25,6 +31,7 @@ FileInfo::FileInfo(
     QString fullpath,
     QDateTime dateOfCreation,
     QDateTime dateOfModification,
+    uint64_t length,
     bool isFile,
     bool isSymLink,
     QString symlinkPath,
@@ -32,11 +39,14 @@ FileInfo::FileInfo(
     _fullpath(fullpath),
     _dateOfCreation(dateOfCreation),
     _dateOfModification(dateOfModification),
+    _length(length),
     _isFile(isFile),
     _isSymLink(isSymLink),
     _symlinkPath(symlinkPath),
     _isDir(isDir)
-{}
+{
+    auto a = length;
+}
 
 QString FileInfo::getFullpath() const
 {
@@ -73,6 +83,11 @@ bool FileInfo::isDir() const
     return _isDir;
 }
 
+uint64_t FileInfo::getLength() const
+{
+    return _length;
+}
+
 
 
 QDataStream &operator<<(QDataStream &out, const FileInfo &fileInfo)
@@ -80,6 +95,7 @@ QDataStream &operator<<(QDataStream &out, const FileInfo &fileInfo)
     out << fileInfo.getFullpath()
         << fileInfo.getDateOfCreation()
         << fileInfo.getDateOfModification()
+        << fileInfo.getLength()
         << fileInfo.isFile()
         << fileInfo.isSymLink()
         << fileInfo.getSymlinkPath()
@@ -92,6 +108,7 @@ QDataStream &operator>>(QDataStream &in, FileInfo &fileInfo)
     QString fullpath;
     QDateTime dateOfCreation;
     QDateTime dateOfModification;
+    uint64_t size;
     bool isFile;
     bool isSymLink;
     QString symlinkPath;
@@ -100,6 +117,7 @@ QDataStream &operator>>(QDataStream &in, FileInfo &fileInfo)
     in  >> fullpath
         >> dateOfCreation
         >> dateOfModification
+        >> size
         >> isFile
         >> isSymLink
         >> symlinkPath
@@ -109,6 +127,7 @@ QDataStream &operator>>(QDataStream &in, FileInfo &fileInfo)
         fullpath,
         dateOfCreation,
         dateOfModification,
+        size,
         isFile,
         isSymLink,
         symlinkPath,

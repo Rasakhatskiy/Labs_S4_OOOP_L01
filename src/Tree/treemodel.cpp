@@ -37,7 +37,7 @@ void TreeModel::setupModelData(
         QVector<QVariant> data(
         {
             subStrings[subStrings.size() - 1],
-            "47",
+            QString::number(fileInfo.getLength() / 1024) + " KB",
             fileInfo.getDateOfCreation().toString(),
             fileInfo.getDateOfModification().toString(),
             fileInfo.isDir() ? "Dir" :

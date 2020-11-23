@@ -20,6 +20,9 @@ class FileInfo
     /*! Date of modification*/
     QDateTime _dateOfModification;
 
+    /*! File length.*/
+    uint64_t _length;
+
     /*! Is file file (O_o)*/
     bool _isFile;
 
@@ -42,7 +45,7 @@ public:
     /*!
      * \brief default constructor
      */
-    FileInfo() = default;
+    FileInfo();
 
     /*!
      * \brief Constructs file info from file system entry.
@@ -61,6 +64,7 @@ public:
      * \param[in] fullpath
      * \param[in] dateOfCreation
      * \param[in] dateOfModification
+     * \param[in] lenght
      * \param[in] isFile
      * \param[in] isSymLink
      * \param[in] symlinkPath
@@ -70,6 +74,7 @@ public:
         QString fullpath,
         QDateTime dateOfCreation,
         QDateTime dateOfModification,
+        uint64_t length,
         bool isFile,
         bool isSymLink,
         QString symlinkPath,
@@ -114,6 +119,11 @@ public:
      */
     bool isDir() const;
 
+    /*!
+     * \brief getLength
+     * \return file length
+     */
+    uint64_t getLength() const;
 
 };
 

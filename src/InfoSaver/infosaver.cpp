@@ -95,7 +95,11 @@ void InfoSaver::scan(QString scanDirPath)
         if (fileInfoTemp.isDir())
             scan(fullpath);
         else
-            this->files.append(fullpath);
+        {
+            auto info = FileInfo(fullpath);
+            this->files.append(info);
+
+        }
     }
 }
 
