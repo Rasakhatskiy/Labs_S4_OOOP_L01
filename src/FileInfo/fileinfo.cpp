@@ -21,6 +21,23 @@ FileInfo::FileInfo(QFileInfo fileInfo)
     construct(fileInfo);
 }
 
+FileInfo::FileInfo(
+    QString fullpath,
+    QDateTime dateOfCreation,
+    QDateTime dateOfModification,
+    bool isFile,
+    bool isSymLink,
+    QString symlinkPath,
+    bool isDir) :
+    _fullpath(fullpath),
+    _dateOfCreation(dateOfCreation),
+    _dateOfModification(dateOfModification),
+    _isFile(isFile),
+    _isSymLink(isSymLink),
+    _symlinkPath(symlinkPath),
+    _isDir(isDir)
+{}
+
 QString FileInfo::getFullpath() const
 {
     return _fullpath;
@@ -58,6 +75,44 @@ bool FileInfo::isDir() const
 
 
 
+QDataStream &operator<<(QDataStream &out, const FileInfo &fileInfo)
+{
+    out << fileInfo.getFullpath()
+        << fileInfo.getDateOfCreation()
+        << fileInfo.getDateOfModification()
+        << fileInfo.isFile()
+        << fileInfo.isSymLink()
+        << fileInfo.getSymlinkPath()
+        << fileInfo.isDir();
+    return out;
+}
 
+QDataStream &operator>>(QDataStream &in, FileInfo &fileInfo)
+{
+    QString fullpath;
+    QDateTime dateOfCreation;
+    QDateTime dateOfModification;
+    bool isFile;
+    bool isSymLink;
+    QString symlinkPath;
+    bool isDir;
 
+    in  >> fullpath
+        >> dateOfCreation
+        >> dateOfModification
+        >> isFile
+        >> isSymLink
+        >> symlinkPath
+        >> isDir;
 
+    fileInfo = FileInfo(
+        fullpath,
+        dateOfCreation,
+        dateOfModification,
+        isFile,
+        isSymLink,
+        symlinkPath,
+        isDir);
+
+    return in;
+}

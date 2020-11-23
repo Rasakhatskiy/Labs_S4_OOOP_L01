@@ -22,6 +22,7 @@
 #include <AclAPI.h>
 #include "accctrl.h"
 #include "aclapi.h"
+#include "fileinfo.hpp"
 #include <sddl.h>
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib,"user32.lib")
@@ -145,7 +146,7 @@ public:
      * \param isAND[in] if true all metadata options should match, else at least one.
      * \return list of found files paths.
      */
-    QStringList doSearch(
+    QList<FileInfo> doSearch(
         const QString& startSearchPath,
         const bool& isAND);
 

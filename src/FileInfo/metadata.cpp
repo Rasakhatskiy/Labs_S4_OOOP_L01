@@ -286,7 +286,7 @@ SYSTEMTIME Metadata::dateTimeFromQDateTime(const QDateTime &dateTime)
     return timeCreation;
 }
 
-QStringList Metadata::doSearch(
+QList<FileInfo> Metadata::doSearch(
         const QString &startSearchPath,
         const bool &isAND)
 {
@@ -304,7 +304,7 @@ QStringList Metadata::doSearch(
        QDir::Files,
        QDir::DirsFirst);
 
-    QStringList result;
+    QList<FileInfo> result;
     for (auto &file : allFiles)
     {
         auto fileInfoTemp = QFileInfo(startSearchPath + "/" + file);
