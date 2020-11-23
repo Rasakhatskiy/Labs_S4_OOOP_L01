@@ -1,7 +1,7 @@
 #include "windowtree.hpp"
 #include "ui_windowtree.h"
 
-WindowTree::WindowTree(const QStringList& data, QWidget *parent) :
+WindowTree::WindowTree(const QList<FileInfo>& data, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WindowTree)
 {
@@ -19,7 +19,7 @@ void WindowTree::on_button_ok_clicked()
     close();
 }
 
-void WindowTree::setupTree(const QStringList &data)
+void WindowTree::setupTree(const QList<FileInfo> &data)
 {
     QVector<QVariant> vector;
     auto treeModel = new TreeModel(data, this);

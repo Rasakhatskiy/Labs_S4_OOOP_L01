@@ -38,11 +38,13 @@ private slots:
 
     void on_button_openExplorer_clicked();
 
-    void on_button_browseSaveAs_clicked();
-
     void on_button_startEditMetadata_clicked();
 
     void on_button_SearchMetadata_clicked();
+
+    void on_button_open_clicked();
+
+    void on_button_browseSaveAs_clicked();
 
 private:
     /*! Pointer to user interface of the form.*/
@@ -62,6 +64,12 @@ private:
      * \return Path if selected, else NULL.
      */
     QString CallOpenFileDialog();
+
+    /*!
+     * \brief Calls OpenFileDialog and takes file path.
+     * \return Path if selected, else NULL.
+     */
+    QString CallSaveFileDialog();
 
     /*!
      * \brief Calls OpenFileDialog and takes file path.

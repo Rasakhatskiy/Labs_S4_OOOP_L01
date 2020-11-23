@@ -3,12 +3,10 @@
 
 WindowMetadataSearch::WindowMetadataSearch(
         const QString& path,
-        const bool &isAND,
         QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WindowMetadataSearch),
-    path(path),
-    isAND(isAND)
+    path(path)
 {
     ui->setupUi(this);
 }
@@ -27,7 +25,7 @@ void WindowMetadataSearch::on_button_search_clicked()
         ui->lineEdit_owner->text(),
         ui->lineEdit_extension->text());
 
-    auto result = toSearch.doSearch(path, isAND);
+    auto result = toSearch.doSearch(path, ui->radioButton_AND->isChecked());
 
     auto window = new WindowTree(result, this);
     window->show();

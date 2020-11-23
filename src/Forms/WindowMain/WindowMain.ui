@@ -14,7 +14,7 @@
    <string>Offline file ManaGer (OMG)</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources.qrc">
     <normaloff>:/res/Forms/ico.ico</normaloff>:/res/Forms/ico.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -151,7 +151,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

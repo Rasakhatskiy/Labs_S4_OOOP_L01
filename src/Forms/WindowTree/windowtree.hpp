@@ -13,7 +13,7 @@ class WindowTree : public QDialog
     Q_OBJECT
 
 public:
-    explicit WindowTree(const QStringList& data, QWidget *parent = nullptr);
+    explicit WindowTree(const QList<FileInfo>& data, QWidget *parent = nullptr);
     ~WindowTree();
 
 private slots:
@@ -26,7 +26,7 @@ private:
      * \brief writes tree to tree model.
      * \param data[in] File paths data to write to tree.
      */
-    void setupTree(const QStringList& data);
+    void setupTree(const QList<FileInfo>& data);
 };
 
 #endif // WINDOWTREE_HPP

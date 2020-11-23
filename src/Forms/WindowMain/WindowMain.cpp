@@ -19,6 +19,32 @@ MainWindow::~MainWindow()
 }
 
 
+
+QString MainWindow::isSourceValid()
+{
+    // Check if something if index valid. It must be valid
+    auto index = ui->comboBox_selectDrive->currentIndex();
+    if (index < 0 ||
+        index >= _listStorageInfo.size())
+        throw std::invalid_argument("Index " + std::to_string(index) + " does not exists");
+
+    // Check if this drive exists.
+    auto sourcePath = _listStorageInfo[index].rootPath();
+    sourcePath[sourcePath.size() - 1] = '\\';
+    if (!QFileInfo(sourcePath).exists())
+    {
+        QMessageBox::warning(
+            this,
+            "Invalid input",
+            "Directory " + sourcePath + " does not exists");
+        return NULL;
+    }
+
+    return sourcePath;
+}
+
+//##################################BUTTONS##################################
+
 void MainWindow::on_button_refreshDrives_clicked()
 {
     ui->comboBox_selectDrive->clear();
@@ -60,18 +86,7 @@ void MainWindow::on_button_openExplorer_clicked()
 
 void MainWindow::on_button_browseSaveAs_clicked()
 {
-    QFileDialog dialog_saveAs(this);
-    dialog_saveAs.setFileMode(QFileDialog::AnyFile);
-    dialog_saveAs.setDirectory("D:\\");
-    dialog_saveAs.setWindowTitle("Save as");
-    dialog_saveAs.setNameFilter(tr("Binary file (*.bin *.data *.img)"));
-    dialog_saveAs.setViewMode(QFileDialog::Detail);
-
-    QString resultPath =
-            dialog_saveAs.exec() ?
-            dialog_saveAs.selectedFiles()[0] :
-            NULL;
-
+    auto resultPath = CallSaveFileDialog();
     auto sourcePath = isSourceValid();
 
     if (sourcePath == NULL ||
@@ -94,58 +109,8 @@ void MainWindow::on_button_browseSaveAs_clicked()
     auto infoSaver = InfoSaver();
     infoSaver.scan(sourcePath);
     infoSaver.save(resultPath);
-    auto window = new WindowTree(infoSaver.toQStringList(), this);
+    auto window = new WindowTree(infoSaver.getFileInfos(), this);
     window->show();
-}
-
-QString MainWindow::isSourceValid()
-{
-    // Check if something if index valid. It must be valid
-    auto index = ui->comboBox_selectDrive->currentIndex();
-    if (index < 0 ||
-        index >= _listStorageInfo.size())
-        throw std::invalid_argument("Index " + std::to_string(index) + " does not exists");
-
-    // Check if this drive exists.
-    auto sourcePath = _listStorageInfo[index].rootPath();
-    sourcePath[sourcePath.size() - 1] = '\\';
-    if (!QFileInfo(sourcePath).exists())
-    {
-        QMessageBox::warning(
-            this,
-            "Invalid input",
-            "Directory " + sourcePath + " does not exists");
-        return NULL;
-    }
-
-    return sourcePath;
-}
-
-QString MainWindow::CallOpenFileDialog()
-{
-    QFileDialog dialog_saveAs(this);
-    dialog_saveAs.setFileMode(QFileDialog::ExistingFile);
-    dialog_saveAs.setDirectory("D:\\");
-    dialog_saveAs.setWindowTitle("Open  file");
-    dialog_saveAs.setNameFilter(tr("Any file (*)"));
-    dialog_saveAs.setViewMode(QFileDialog::Detail);
-    if (!dialog_saveAs.exec())
-        return NULL;
-    else
-        return dialog_saveAs.selectedFiles()[0];
-}
-
-QString MainWindow::CallDirDialog()
-{
-    QFileDialog dialog_saveAs(this);
-    dialog_saveAs.setFileMode(QFileDialog::DirectoryOnly);
-    dialog_saveAs.setDirectory("D:\\");
-    dialog_saveAs.setWindowTitle("Select directory");
-    dialog_saveAs.setViewMode(QFileDialog::Detail);
-    if (!dialog_saveAs.exec())
-        return NULL;
-    else
-        return dialog_saveAs.selectedFiles()[0];
 }
 
 void MainWindow::on_button_startEditMetadata_clicked()
@@ -163,6 +128,62 @@ void MainWindow::on_button_SearchMetadata_clicked()
     if (path == NULL)
         return;
 
-    auto window = new WindowMetadataSearch(path, false, this);
+    auto window = new WindowMetadataSearch(path, this);
     window->show();
 }
+
+void MainWindow::on_button_open_clicked()
+{
+    auto path = CallOpenFileDialog();
+    if (path == NULL) return;
+
+    InfoSaver infoSaver;
+    infoSaver.open(path);
+    auto window = new WindowTree(infoSaver.getFileInfos(), this);
+    window->show();
+}
+
+//##################################DIALOGS##################################
+
+QString MainWindow::CallOpenFileDialog()
+{
+    QFileDialog dialog_saveAs(this);
+    dialog_saveAs.setFileMode(QFileDialog::ExistingFile);
+    dialog_saveAs.setDirectory("D:\\");
+    dialog_saveAs.setWindowTitle("Open  file");
+    dialog_saveAs.setNameFilter(tr("Any file (*)"));
+    dialog_saveAs.setViewMode(QFileDialog::Detail);
+    if (!dialog_saveAs.exec())
+        return NULL;
+    else
+        return dialog_saveAs.selectedFiles()[0];
+}
+
+QString MainWindow::CallSaveFileDialog()
+{
+    QFileDialog dialog_saveAs(this);
+    dialog_saveAs.setFileMode(QFileDialog::AnyFile);
+    dialog_saveAs.setDirectory("D:\\");
+    dialog_saveAs.setWindowTitle("Save as");
+    dialog_saveAs.setNameFilter(tr("Binary file (*.bin *.data *.img)"));
+    dialog_saveAs.setViewMode(QFileDialog::Detail);
+
+    return
+        dialog_saveAs.exec() ?
+        dialog_saveAs.selectedFiles()[0] :
+        NULL;
+}
+
+QString MainWindow::CallDirDialog()
+{
+    QFileDialog dialog_saveAs(this);
+    dialog_saveAs.setFileMode(QFileDialog::DirectoryOnly);
+    dialog_saveAs.setDirectory("D:\\");
+    dialog_saveAs.setWindowTitle("Select directory");
+    dialog_saveAs.setViewMode(QFileDialog::Detail);
+    if (!dialog_saveAs.exec())
+        return NULL;
+    else
+        return dialog_saveAs.selectedFiles()[0];
+}
+

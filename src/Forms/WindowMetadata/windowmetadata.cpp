@@ -50,6 +50,8 @@ void WindowMetadata::on_button_save_clicked()
         ui->lineEdit_owner->text(),
         ui->lineEdit_extension->text());
 
+//    ui->textEdit->
+
     if (toSave.save(path))
     {
         QMessageBox::information(

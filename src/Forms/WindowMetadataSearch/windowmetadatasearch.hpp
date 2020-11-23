@@ -19,7 +19,6 @@ class WindowMetadataSearch : public QDialog
 public:
     explicit WindowMetadataSearch(
         const QString& path,
-        const bool &isAND,
         QWidget *parent = nullptr);
     ~WindowMetadataSearch();
 
@@ -30,9 +29,9 @@ private slots:
 
 private:
     Ui::WindowMetadataSearch *ui;
-    QString path;
-    bool isAND;
 
+    /*! Path from where to search.*/
+    QString path;
 
 };
 
