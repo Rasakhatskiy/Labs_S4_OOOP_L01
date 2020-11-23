@@ -1,14 +1,16 @@
 #include "treemodel.hpp"
 
-void TreeModel::setupModelData(const QStringList &paths, TreeItem *parent)
+void TreeModel::setupModelData(
+    const QList<FileInfo> &files,
+    TreeItem *parent)
 {
-    for(auto &path : paths)
+    for(auto &fileInfo : files)
     {
-        auto subStrings = path.split("/");
+        auto subStrings = fileInfo.getFullpath().split("/");
         auto current = rootItem;
-        for (auto &subItem : subStrings)
+        for (int i = 0; i < subStrings.size() - 1; ++i)
         {
-            auto index = current->findChildrenData(subItem);
+            auto index = current->findChildrenData(subStrings[i]);
             if (index >= 0)
             {
                 current = current->getChild(index);
@@ -16,20 +18,53 @@ void TreeModel::setupModelData(const QStringList &paths, TreeItem *parent)
             }
             else
             {
-                QVector<QVariant> data { subItem };
+                QString empty = "";
+                QVector<QVariant> data(
+                {
+                    subStrings[i],
+                    empty,
+                    empty,
+                    empty,
+                    "Dir",
+                    empty
+                });
                 auto child = new TreeItem(data, current);
                 current->appendChild(child);
                 current = child;
                 continue;
             }
         }
+        QVector<QVariant> data(
+        {
+            subStrings[subStrings.size() - 1],
+            "47",
+            fileInfo.getDateOfCreation().toString(),
+            fileInfo.getDateOfModification().toString(),
+            fileInfo.isDir() ? "Dir" :
+            fileInfo.isFile() ? "File" :
+            fileInfo.isSymLink() ? "Link" :
+            "Undefined",
+            fileInfo.getSymlinkPath()
+        });
+        auto child = new TreeItem(data, current);
+        current->appendChild(child);
+        current = child;
     }
 }
 
-TreeModel::TreeModel(const QStringList &data, QObject *parent)
+TreeModel::TreeModel(
+    const QList<FileInfo> &data,
+    QObject *parent)
     : QAbstractItemModel(parent)
 {
-    rootItem = new TreeItem({tr("Title"), tr("Summary")});
+    rootItem = new TreeItem({
+        tr("Title"),
+        tr("Size"),
+        tr("Creation date"),
+        tr("Modification date"),
+        tr("Type"),
+        tr("Link path")});
+
     setupModelData(data, rootItem);
 }
 

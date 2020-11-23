@@ -2,7 +2,9 @@
 #define TREEMODEL_HPP
 
 #include <QAbstractItemModel>
+#include <QList>
 #include <QModelIndex>
+#include <src/FileInfo/fileinfo.hpp>
 #include "treeitem.hpp"
 
 class TreeModel : public QAbstractItemModel
@@ -15,7 +17,9 @@ private:
      * \param lines[in] String list of file paths.
      * \param parent[out] Treeitem to apply model.
      */
-    void setupModelData(const QStringList &lines, TreeItem *parent);
+    void setupModelData(
+        const QList<FileInfo> &files,
+        TreeItem *parent);
 
     /*! Root item of tree model.*/
     TreeItem *rootItem;
@@ -26,7 +30,9 @@ public:
      * \param data[in] Data for constructing tree.
      * \param parent[in] Parent object.
      */
-    explicit TreeModel(const QStringList &data, QObject *parent = nullptr);
+    explicit TreeModel(
+        const QList<FileInfo> &data,
+        QObject *parent = nullptr);
 
     /*! Destructor, deletes root */
     ~TreeModel();

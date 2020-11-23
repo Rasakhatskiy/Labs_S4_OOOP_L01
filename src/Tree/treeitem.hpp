@@ -29,7 +29,9 @@ public:
      * \param[in] data Data of the node.
      * \param[in] parent Parent node of the node.
      */
-    explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = nullptr);
+    explicit TreeItem(
+        const QVector<QVariant> &data,
+        TreeItem *parent = nullptr);
 
     /*! Destructor. Deletes all children. */
     ~TreeItem();
