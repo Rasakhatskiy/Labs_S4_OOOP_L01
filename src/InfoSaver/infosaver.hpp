@@ -52,6 +52,12 @@ public:
     void save(QString resultFilePath);
 
     /*!
+     * \brief Opens and reads file infos
+     * \param resultFilePath[in] path of saved file
+     */
+    void open(const QString& resultFilePath);
+
+    /*!
      * \brief Recursivaly scans directory for files and saves info about them.
      * \param[in] scanDirPath
      */
@@ -67,6 +73,8 @@ public:
      * \return list of paths
      */
     QStringList toQStringList();
+
+    QList<FileInfo> getFileInfos() const;
 };
 
 #endif // INFOSAVER_HPP

@@ -29,18 +29,48 @@ void InfoSaver::add(QList<QFileInfo> fileInfos)
 
 void InfoSaver::save(QString resultFilePath)
 {
-    std::ofstream file(resultFilePath.toStdString(), std::ios::out | std::ios::binary);
 
-    if(!file)
+    QFile file(resultFilePath);
+    if(!file.open(QIODevice::WriteOnly))
+    {
         throw std::invalid_argument("Unable to open file " + resultFilePath.toStdString());
+        return;
+    }
 
-    size_t size = this->files.size();
-    file.write((char*)&size, sizeof(size));
-    file.write((char*)&this->files[0], size * sizeof(FileInfo));
+    QDataStream writer(&file);
+    auto size = files.size();
+
+    writer << size;
+    for (int i = 0; i < size; ++i)
+        writer << files[i];
+
     file.close();
-    if(!file.good())
-        throw std::runtime_error("Writing error: " + resultFilePath.toStdString());
 }
+
+void InfoSaver::open(const QString &filePath)
+{
+     QFile file(filePath);
+     if(!file.open(QIODevice::ReadOnly))
+     {
+         throw std::invalid_argument("Unable to open file " + filePath.toStdString());
+         return;
+     }
+
+    QDataStream reader(&file);
+    int size;
+    reader >> size;
+
+    for (int i = 0; i < size; ++i)
+    {
+        FileInfo fileInfo;
+        reader >> fileInfo;
+        files.append(fileInfo);
+    }
+
+    file.close();
+}
+
+
 
 void InfoSaver::scan(QString scanDirPath)
 {
@@ -81,6 +111,11 @@ QStringList InfoSaver::toQStringList()
     for (auto &file : files)
         list.append(file.getFullpath());
     return list;
+}
+
+QList<FileInfo> InfoSaver::getFileInfos() const
+{
+    return files;
 }
 
 
