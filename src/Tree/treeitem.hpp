@@ -5,19 +5,25 @@
 #include <QVariant>
 
 /*!
- * The TreeItem class provides node for constructing tree,
+ * \brief Provides node for constructing tree,
  * that can be applied to tree model.
  */
 class TreeItem
 {
 private:
-    /*! Vector of children nodes */
+    /*!
+     * \brief Vector of children nodes.
+     */
     QVector<TreeItem*> _children;
 
-    /*! Vector of data*/
+    /*!
+     * \brief Vector of data.
+     */
     QVector<QVariant> _data;
 
-    /*! Pointer to parent node*/
+    /*!
+     * \brief Pointer to parent node.
+     */
     TreeItem *_parent;
 
 public:
@@ -33,7 +39,9 @@ public:
         const QVector<QVariant> &data,
         TreeItem *parent = nullptr);
 
-    /*! Destructor. Deletes all children. */
+    /*!
+     * \brief Destructor. Deletes all children.
+      */
     ~TreeItem();
 
     /*!

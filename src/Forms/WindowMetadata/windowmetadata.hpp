@@ -10,6 +10,9 @@ namespace Ui {
 class WindowMetadata;
 }
 
+/*!
+ * \brief Window for editing metadata.
+ */
 class WindowMetadata : public QDialog
 {
     Q_OBJECT

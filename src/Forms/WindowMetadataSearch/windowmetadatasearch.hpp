@@ -12,6 +12,9 @@ namespace Ui {
 class WindowMetadataSearch;
 }
 
+/*!
+ * \brief Window for entering metadata for search.
+ */
 class WindowMetadataSearch : public QDialog
 {
     Q_OBJECT

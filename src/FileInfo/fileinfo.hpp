@@ -7,7 +7,11 @@
 #include <QString>
 
 /*!
- * The FileInfo class made for saving info on disk
+
+ */
+
+/*!
+ * \brief Class made for saving info on disk
  * (you cannot do this with QFileInfo)
  */
 class FileInfo
@@ -88,47 +92,50 @@ public:
         const bool& isDir);
 
     /*!
-     * \return Full path of file
+     * \brief Returns full path of file.
+     * \return Full path of file.
      */
     QString getFullpath() const;
 
     /*!
+     * \brief Returns date of creation.
      * \return Date of creation
      */
     QDateTime getDateOfCreation() const;
 
     /*!
+     * \brief Returns date of modification.
      * \return Date of modification
      */
     QDateTime getDateOfModification() const;
 
     /*!
-     * \brief isFile
+     * \brief is file
      * \return Is file file
      */
     bool isFile() const;
 
     /*!
-     * \brief isSymLink
+     * \brief is symLink
      * \return Is file symlink
      */
     bool isSymLink() const;
 
     /*!
-     * \brief getSymlinkPath
-     * \return Path reffered by symlink
+     * \brief Returns symlink path.
+     * \return Path reffered by symlink.
      */
     QString getSymlinkPath() const;
 
     /*!
-     * \brief isDir
-     * \return Is file directory
+     * \brief is dir.
+     * \return Is file directory.
      */
     bool isDir() const;
 
     /*!
-     * \brief getLength
-     * \return file length
+     * \brief returns file length.
+     * \return file length in bytes.
      */
     uint64_t getLength() const;
 

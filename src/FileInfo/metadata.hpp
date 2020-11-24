@@ -27,7 +27,9 @@
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib,"user32.lib")
 
-
+/*!
+ * \brief Reads metadata from file in real file system using WIN32 API
+ */
 class Metadata
 {
 private:
@@ -88,19 +90,29 @@ private:
 
 public:
 
-    /*! Date and time of creation.*/
+    /*!
+     * \brief Date and time of creation.
+     */
     QDateTime dateTimeCreation;
 
-    /*! Date and time of modification.*/
+    /*!
+     * \brief Date and time of modification.
+     */
     QDateTime dateTimeModification;
 
-    /*! Length of file in bytes.*/
+    /*!
+     * \brief Length of file in bytes.
+     */
     uint64_t length;
 
-    /*! Name of owner.*/
+    /*!
+     * \brief Name of owner.
+     */
     QString owner;
 
-    /*! File extension.*/
+    /*!
+     * \brief File extension.
+     */
     QString extension;
 
     /*!

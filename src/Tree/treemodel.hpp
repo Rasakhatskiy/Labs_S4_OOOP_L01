@@ -7,6 +7,12 @@
 #include <src/FileInfo/fileinfo.hpp>
 #include "treeitem.hpp"
 
+
+/*!
+ * \brief The TreeModel class
+ * Overridden QAbstractItemModel
+ * Provides tree model for qt tree view
+ */
 class TreeModel : public QAbstractItemModel
 {
     Q_OBJECT

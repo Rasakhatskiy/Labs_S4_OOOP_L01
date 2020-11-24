@@ -8,6 +8,10 @@ namespace Ui {
 class WindowTree;
 }
 
+
+/*!
+ * \brief Window for printing filesystem to tree.
+ */
 class WindowTree : public QDialog
 {
     Q_OBJECT
