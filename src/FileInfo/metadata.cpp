@@ -314,7 +314,7 @@ QList<FileInfo> Metadata::doSearch(
             result.append(doSearch(fullpath, isAND));
         else
             if (matchesCriterion(fullpath, isAND))
-                result.append(fullpath);
+                result.append(FileInfo(fullpath));
     }
     return result;
 }

@@ -1,6 +1,6 @@
 #include "fileinfo.hpp"
 
-void FileInfo::construct(const QFileInfo fileInfo)
+void FileInfo::construct(const QFileInfo& fileInfo)
 {
     _fullpath = fileInfo.absoluteFilePath();
     _dateOfCreation = fileInfo.birthTime();
@@ -12,40 +12,47 @@ void FileInfo::construct(const QFileInfo fileInfo)
     _length = fileInfo.size();
 }
 
-FileInfo::FileInfo()
-{
+//FileInfo::FileInfo(const FileInfo &fileInfo)
+//{
+//    _fullpath = fileInfo._fullpath;
+//    _dateOfCreation = fileInfo._dateOfCreation;
+//    _dateOfModification = fileInfo._dateOfModification;
+//    _isFile = fileInfo._isFile;
+//    _isSymLink = fileInfo._isSymLink;
+//    _symlinkPath = fileInfo._symlinkPath;
+//    _isDir = fileInfo._isDir;
+//    _length = fileInfo._length;
+//}
 
-}
-
-FileInfo::FileInfo(QString fullpath)
+FileInfo::FileInfo(const QString& fullpath)
 {
     construct(QFileInfo(fullpath));
 }
 
-FileInfo::FileInfo(QFileInfo fileInfo)
+FileInfo::FileInfo(const QFileInfo& fileInfo)
 {
     construct(fileInfo);
 }
 
 FileInfo::FileInfo(
-    QString fullpath,
-    QDateTime dateOfCreation,
-    QDateTime dateOfModification,
-    uint64_t length,
-    bool isFile,
-    bool isSymLink,
-    QString symlinkPath,
-    bool isDir) :
-    _fullpath(fullpath),
-    _dateOfCreation(dateOfCreation),
-    _dateOfModification(dateOfModification),
-    _length(length),
-    _isFile(isFile),
-    _isSymLink(isSymLink),
-    _symlinkPath(symlinkPath),
-    _isDir(isDir)
+    const QString& fullpath,
+    const QDateTime& dateOfCreation,
+    const QDateTime& dateOfModification,
+    const uint64_t& length,
+    const bool& isFile,
+    const bool& isSymLink,
+    const QString& symlinkPath,
+    const bool& isDir)
+
 {
-    auto a = length;
+    _fullpath = fullpath;
+    _dateOfCreation = dateOfCreation;
+    _dateOfModification = dateOfModification;
+    _length = length;
+    _isFile = isFile;
+    _isSymLink = isSymLink;
+    _symlinkPath = symlinkPath;
+    _isDir = isDir;
 }
 
 QString FileInfo::getFullpath() const

@@ -4,6 +4,7 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDataStream>
+#include <QString>
 
 /*!
  * The FileInfo class made for saving info on disk
@@ -39,25 +40,31 @@ class FileInfo
      * \brief Copies parameters from QFileInfo to FileInfo
      * \param fileInfo
      */
-    void construct(const QFileInfo fileInfo);
+    void construct(const QFileInfo& fileInfo);
 
 public:
     /*!
      * \brief default constructor
      */
-    FileInfo();
+    FileInfo() = default;
+
+    /*!
+     * \brief Copy constructor
+     * \param[in] Copy from
+     */
+//    FileInfo(const FileInfo& fileInfo);
 
     /*!
      * \brief Constructs file info from file system entry.
      * \param fullpath Full path of the file.
      */
-    FileInfo(QString fullpath);
+    FileInfo(const QString& fullpath);
 
     /*!
      * \brief Copies parameters from QFileInfo to FileInfo
      * \param fileInfo
      */
-    FileInfo(QFileInfo fileInfo);
+    FileInfo(const QFileInfo& fileInfo);
 
     /*!
      * \brief Constructor by fields
@@ -71,14 +78,14 @@ public:
      * \param[in] isDir
      */
     FileInfo(
-        QString fullpath,
-        QDateTime dateOfCreation,
-        QDateTime dateOfModification,
-        uint64_t length,
-        bool isFile,
-        bool isSymLink,
-        QString symlinkPath,
-        bool isDir);
+        const QString& fullpath,
+        const QDateTime& dateOfCreation,
+        const QDateTime& dateOfModification,
+        const uint64_t& length,
+        const bool& isFile,
+        const bool& isSymLink,
+        const QString& symlinkPath,
+        const bool& isDir);
 
     /*!
      * \return Full path of file
