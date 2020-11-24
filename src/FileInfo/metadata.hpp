@@ -52,7 +52,7 @@ private:
      * \param hFile[in] HANDLE for file reading
      * \return Pair of <Date of creation, Date of modification>
      */
-    QPair<QDateTime, QDateTime> getTime(HANDLE hFile);
+    QPair<QDateTime, QDateTime> getTime(HANDLE hFile, QString path = NULL);
 
     /*!
      * \brief Sets file time of creation and modification to given.

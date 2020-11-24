@@ -37,9 +37,11 @@ void TreeModel::setupModelData(
         QVector<QVariant> data(
         {
             subStrings[subStrings.size() - 1],
+            fileInfo.getLength() < 1024 ?
+            QString::number(fileInfo.getLength()) + " B"    :
             QString::number(fileInfo.getLength() / 1024) + " KB",
-            fileInfo.getDateOfCreation().toString(),
-            fileInfo.getDateOfModification().toString(),
+            fileInfo.getDateOfCreation().toString("yyyy-MM-dd HH:mm"),
+            fileInfo.getDateOfModification().toString("yyyy-MM-dd HH:mm"),
             fileInfo.isDir() ? "Dir" :
             fileInfo.isFile() ? "File" :
             fileInfo.isSymLink() ? "Link" :

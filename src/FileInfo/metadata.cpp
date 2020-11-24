@@ -63,7 +63,7 @@ HANDLE Metadata::openFileWrite(const QString &path)
         NULL);
 }
 
-QPair<QDateTime, QDateTime> Metadata::getTime(HANDLE hFile)
+QPair<QDateTime, QDateTime> Metadata::getTime(HANDLE hFile, QString path)
 {
     FILETIME ftCreate, ftAccess, ftWrite;
     SYSTEMTIME stCreationUTC, stModificationUTC;
@@ -100,7 +100,9 @@ QPair<QDateTime, QDateTime> Metadata::getTime(HANDLE hFile)
             stModificationUTC.wMinute,
             stModificationUTC.wSecond));
 
-    return QPair<QDateTime, QDateTime>(dateCreation, dateModification);
+    auto info = QFileInfo(path);
+
+    return QPair<QDateTime, QDateTime>(info.birthTime(), info.lastModified());
 }
 
 bool Metadata::setTime(HANDLE hFile, QPair<QDateTime, QDateTime> pair)
@@ -325,20 +327,23 @@ bool Metadata::matchesCriterion(
 {
     auto info = QFileInfo(path);
     auto file = openFileRead(path);
-    auto dates = getTime(file);
+    auto dates = getTime(file, path);
     auto owner = getOwner(file);
+//    qDebug() << this->dateTimeCreation.toString("yyyy-MM-dd HH-mm-ss.zzz");
+//    qDebug() << dates.first.toString("yyyy-MM-dd HH-mm-ss.zzz");
+//    qDebug() << "============\n";
     CloseHandle(file);
     if (isAND)
         return
-            (this->dateTimeCreation == dates.first) &&
-            (this->dateTimeModification == dates.second) &&
+            (this->dateTimeCreation.toString("yyyy-MM-dd HH-mm") == dates.first.toString("yyyy-MM-dd HH-mm")) &&
+            (this->dateTimeModification.toString("yyyy-MM-dd HH-mm") == dates.second.toString("yyyy-MM-dd HH-mm")) &&
             ((qint64)this->length == info.size()) &&
             (this->owner == owner) &&
             (this->extension == info.completeSuffix());
     else
         return
-            (this->dateTimeCreation == dates.first) ||
-            (this->dateTimeModification == dates.second) ||
+            (this->dateTimeCreation.toString("yyyy-MM-dd HH-mm") == dates.first.toString("yyyy-MM-dd HH-mm")) ||
+            (this->dateTimeModification.toString("yyyy-MM-dd HH-mm") == dates.second.toString("yyyy-MM-dd HH-mm")) ||
             ((qint64)this->length == info.size()) ||
             (this->owner == owner) ||
             (this->extension == info.completeSuffix());
